@@ -4,13 +4,12 @@
 
 import json
 from corpus import Corpus
+from loader_prototype import LoaderPrototype
 
 
-class FbLoader(object):
+class FbLoader(LoaderPrototype):
     def __init__(self, path='../data/message_1.json'):
-        self.path = path
-        self.load()
-        self.decode()
+        super().__init__(path)
 
     def load(self):
         def fix_fb_code(obj):
@@ -34,19 +33,11 @@ class FbLoader(object):
             data = json.load(fr, object_hook=fix_fb_code)
 
         self.chat = data['messages']
-        self.authors = tuple(map(lambda x: x['name'], data['participants']))
-        self.corpus = dict()
-        for author in self.authors:
-            self.corpus[author] = Corpus(author)
 
     def decode(self):
         for message in self.chat:
             if 'content' in message and 'sender_name' in message:
-                self.corpus[message['sender_name']].add(message['content'])
-
-    def save(self):
-        for name in self.corpus:
-            self.corpus[name].save()
+                self.corpus.add(message['sender_name'], message['content'])
 
 
 if __name__ == '__main__':

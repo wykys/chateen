@@ -1,6 +1,7 @@
 # wykys 2020
 # knihovna pro práci s korpusem
 
+
 class Corpus(object):
     def __init__(self, author: str):
         self.author = author

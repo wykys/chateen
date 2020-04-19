@@ -3,7 +3,7 @@
 # ze sociálních sítí
 # wykys 2020
 
-from fb_loader import FbLoader
+from loader_fb import FbLoader
 
 
 if __name__ == '__main__':
