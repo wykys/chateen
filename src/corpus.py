@@ -10,5 +10,5 @@ class Corpus(object):
         self.messages.append(f'<s>{item}</s>\n')
 
     def save(self):
-        with open(f'../out/{self.author}.txt', 'w') as fw:
+        with open(f'../out/{self.author}.txt', 'w', encoding='utf-8') as fw:
             fw.writelines(self.messages)

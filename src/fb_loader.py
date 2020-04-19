@@ -30,7 +30,7 @@ class FbLoader(object):
                     )
             return obj
 
-        with open(self.path, 'r') as fr:
+        with open(self.path, 'r', encoding='utf-8') as fr:
             data = json.load(fr, object_hook=fix_fb_code)
 
         self.chat = data['messages']
