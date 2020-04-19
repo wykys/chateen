@@ -42,3 +42,7 @@ if __name__ == '__main__':
 
     id = loader.corpus.get_top_id()
     loader.corpus.get_chat_with_id(id)
+    part = loader.corpus.get_participants_from_chat(20)
+    print('='*80)
+    for p in part:
+        print(p)
