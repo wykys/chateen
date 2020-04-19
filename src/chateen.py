@@ -4,6 +4,7 @@
 # wykys 2020
 
 from loader_fb import FbLoader
+from loader_ig import IgLoader
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ class CorpusDict(object):
     def __init__(self):
         self.corpus = dict()
 
-    def add(self, participant: str, message: str):
+    def add(self, participant: str, message: str, id: int = None):
         if not participant in self.corpus:
             self.corpus[participant] = Corpus(participant)
         self.corpus[participant].add(message)

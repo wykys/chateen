@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # wykys 2020
-# program pro vytváření korpusů z Facebook JSON
+# program pro vytváření korpusů z Instagramu JSON
 
 import json
 from corpus import Corpus
@@ -30,12 +30,10 @@ class IgLoader(LoaderPrototype):
             self.chat.append(IgChat(chat, id))
 
     def decode(self):
-
         for chat in self.chat:
             for message in chat.conversation:
                 if 'text' in message and 'sender' in message:
-                    self.corpus.add(message['sender'], message['text'])
-
+                    self.corpus.add(message['sender'], message['text'], chat.id)
 
 
 if __name__ == '__main__':
