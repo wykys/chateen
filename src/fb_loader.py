@@ -2,21 +2,8 @@
 # wykys 2020
 # program pro vytváření korpusů z Facebook JSON
 
-import re
 import json
-
-
-class Corpus(object):
-    def __init__(self, author: str):
-        self.author = author
-        self.messages = []
-
-    def add(self, item: str):
-        self.messages.append(f'<s>{item}</s>\n')
-
-    def save(self):
-        with open(f'../out/{self.author}.txt', 'w') as fw:
-            fw.writelines(self.messages)
+from corpus import Corpus
 
 
 class FbLoader(object):
@@ -65,4 +52,3 @@ class FbLoader(object):
 if __name__ == '__main__':
     loader = FbLoader()
     loader.save()
-
