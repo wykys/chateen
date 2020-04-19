@@ -39,3 +39,6 @@ class IgLoader(LoaderPrototype):
 if __name__ == '__main__':
     loader = IgLoader()
     loader.save()
+
+    id = loader.corpus.get_top_id()
+    loader.corpus.get_chat_with_id(id)
