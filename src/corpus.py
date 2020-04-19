@@ -33,6 +33,7 @@ class Corpus(object):
 class CorpusDict(object):
     def __init__(self):
         self.corpus = dict()
+        self.participants = []
 
     def add(self, participant: str, message: str, id: int = 0):
         if not participant in self.corpus:
@@ -43,10 +44,17 @@ class CorpusDict(object):
         for participant in self.corpus:
             self.corpus[participant].save()
 
+    def get_participants(self) -> list:
+        self.participants = []
+        for participant in self.corpus:
+            self.participants.append(participant)
+        return self.participants
+
+
     def show(self):
         for participant in self.corpus:
             for rec in self.corpus[participant].records:
-                print(rec.id)
+                print(rec.message)
 
     def get_participants_from_chat(self, id: int) -> list:
         res = []

@@ -1,41 +1,84 @@
 #!/usr/bin/env python3
 
 import sys
-from tr import tr
-from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
-                               QVBoxLayout, QDialog, QFileDialog)
+from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QLineEdit, QVBoxLayout, QFileDialog, QDesktopWidget, QGroupBox, QRadioButton, QCompleter
+from loader_fb import FbLoader
+from loader_ig import IgLoader
 
 
-class Form(QDialog):
+class Window(QWidget):
+    def __init__(self):
+        super().__init__()
 
-    def __init__(self, parent=None):
-        super(Form, self).__init__(parent)
+        self.corpus = None
 
-        self.button = QPushButton('Load JSON')
-        self.edit = QLineEdit('Zadej své jméno')
+        self.setWindowTitle('Chateen')
+        self.setGeometry(300, 300, 300, 300)
+        self.center_window()
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.edit)
-        layout.addWidget(self.button)
-        self.setLayout(layout)
-        self.button.clicked.connect(self.load_json)
+        self.vbox = QVBoxLayout()
+        self.create_load_ui()
+        self.setLayout(self.vbox)
 
-    # Greets the user
+    def center_window(self):
+        rectangle = self.frameGeometry()
+        center_point = QDesktopWidget().availableGeometry().center()
+        rectangle.moveCenter(center_point)
+        self.move(rectangle.topLeft())
+
+    def create_load_ui(self):
+        group_box = QGroupBox('Načti data')
+
+        self.radio_ig = QRadioButton('Instagram')
+        self.radio_fb = QRadioButton('Facebook')
+
+        self.radio_ig.setChecked(True)
+
+        button = QPushButton('Vyber JSON')
+        button.clicked.connect(self.load_json)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.radio_ig)
+        vbox.addWidget(self.radio_fb)
+        vbox.addWidget(button)
+        vbox.addStretch(1)
+
+        group_box.setLayout(vbox)
+        self.vbox.addWidget(group_box)
+
     def load_json(self):
-        print("Hello %s" % self.edit.text())
-        file_name = QFileDialog.getOpenFileName(self, filter='JSON (*.json *.JSON)', caption='Open JSON', dir='../data')
-        print(file_name)
+        path, _ = QFileDialog.getOpenFileName(self, filter='JSON (*.json *.JSON)', caption='Open JSON', dir='../data')
+
+        if self.radio_ig.isChecked():
+            self.corpus = IgLoader(path).corpus
+        else:
+            self.corpus = FbLoader(path).corpus
+
+        self.corpus.show()
+        self.create_participant_ui()
+
+    def create_participant_ui(self):
+        group_box = QGroupBox('Najdi se')
+
+        completer = QCompleter(self.corpus.get_participants())
+        self.participant = QLineEdit()
+        self.participant.setCompleter(completer)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.participant)
+        vbox.addStretch(1)
+
+        group_box.setLayout(vbox)
+        self.vbox.addWidget(group_box)
+
+
+class GUI(object):
+    def __init__(self):
+        app = QApplication(sys.argv)
+        win = Window()
+        win.show()
+        sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
-    # Create the Qt Application
-    app = QApplication(sys.argv)
-
-
-
-
-    # Create and show the form
-    form = Form()
-    form.show()
-    # Run the main Qt loop
-    sys.exit(app.exec_())
+    GUI()
