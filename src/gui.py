@@ -18,7 +18,7 @@ class Form(QDialog):
         layout.addWidget(self.edit)
         layout.addWidget(self.button)
         self.setLayout(layout)
-        self.button.clicked.connect(self.greetings)
+        self.button.clicked.connect(self.load_json)
 
     # Greets the user
     def load_json(self):
