@@ -3,18 +3,9 @@
 # program pro vytváření korpusů z Instagramu JSON
 
 import json
-from corpus import Corpus
+from database import db
 from loader_prototype import LoaderPrototype
-
-
-class IgChat(object):
-    def __init__(self, chat, id):
-        self.id = id
-        if 'participants' in chat and 'conversation' in chat:
-            self.participants = chat['participants']
-            self.conversation = chat['conversation']
-        else:
-            exit(1)
+from datetime import datetime
 
 
 class IgLoader(LoaderPrototype):
@@ -23,26 +14,38 @@ class IgLoader(LoaderPrototype):
 
     def load(self):
         with open(self.path, 'r', encoding='utf-8') as fr:
-            data = json.load(fr)
-
-        self.chat = []
-        for id, chat in enumerate(data):
-            self.chat.append(IgChat(chat, id))
+            self.data = json.load(fr)
 
     def decode(self):
-        for chat in self.chat:
-            for message in chat.conversation:
-                if 'text' in message and 'sender' in message:
-                    self.corpus.add(message['sender'], message['text'], chat.id)
+
+        for data in self.data:
+            if 'participants' in data and 'conversation' in data:
+                chat = db.new_chat()
+                db.add(chat)
+                db.commit()
+
+                for name in data['participants']:
+                    participant = db.get_participant(name)
+                    if participant is None:
+                        participant = db.new_participant()
+                        participant.name = name
+                        db.add(participant)
+
+                    participant.chats.append(chat)
+                    chat.participants.append(participant)
+                    db.commit()
+
+                for message in data['conversation']:
+                    if 'text' in message and 'sender' in message:
+                        participant = db.get_participant(message['sender'])
+                        msg = db.new_message()
+                        msg.chat = chat
+                        msg.participant = participant
+                        msg.text = message['text']
+                        msg.datetime = datetime.fromisoformat(message['created_at'])
+                        db.add(msg)
+                        db.commit()
 
 
 if __name__ == '__main__':
     loader = IgLoader()
-    loader.save()
-
-    id = loader.corpus.get_top_id()
-    loader.corpus.get_chat_with_id(id)
-    part = loader.corpus.get_participants_from_chat(20)
-    print('='*80)
-    for p in part:
-        print(p)

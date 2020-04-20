@@ -3,8 +3,9 @@
 # program pro vytváření korpusů z Facebook JSON
 
 import json
-from corpus import Corpus
+from datetime import datetime
 from loader_prototype import LoaderPrototype
+from database import db
 
 
 class FbLoader(LoaderPrototype):
@@ -30,16 +31,34 @@ class FbLoader(LoaderPrototype):
             return obj
 
         with open(self.path, 'r', encoding='utf-8') as fr:
-            data = json.load(fr, object_hook=fix_fb_code)
-
-        self.chat = data['messages']
+            self.data = json.load(fr, object_hook=fix_fb_code)
 
     def decode(self):
-        for message in self.chat:
-            if 'content' in message and 'sender_name' in message:
-                self.corpus.add(message['sender_name'], message['content'])
+        chat = db.new_chat()
+        db.add(chat)
+        db.commit()
+
+        for p in self.data['participants']:
+            if 'name' in p:
+                participant = db.new_participant()
+                participant.name = p['name']
+                participant.chats.append(chat)
+                chat.participants.append(participant)
+                db.add(participant)
+                db.commit()
+
+        for message in self.data['messages']:
+            if 'content' in message and 'sender_name' in message and 'timestamp_ms' in message:
+                participant = db.get_participant(message['sender_name'])
+                msg = db.new_message()
+                msg.chat = chat
+                msg.participant = participant
+                msg.text = message['content']
+                time_stamp = int(message['timestamp_ms']) / 1000
+                msg.datetime = datetime.fromtimestamp(time_stamp)
+                db.add(msg)
+                db.commit()
 
 
 if __name__ == '__main__':
     loader = FbLoader()
-    loader.save()

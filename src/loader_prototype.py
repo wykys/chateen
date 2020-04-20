@@ -2,11 +2,11 @@
 # prototyp načítacího objektu
 
 from pathlib import Path
-from corpus import CorpusDict
+#from corpus import CorpusDict
 
 class LoaderPrototype(object):
     def __init__(self, path: str):
-        self.corpus = CorpusDict()
+        #self.corpus = CorpusDict()
         self.authors = []
         self.set_path(path)
         self.load()
