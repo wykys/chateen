@@ -38,7 +38,7 @@ class Message(BaseModel):
 
 
 class Participant(BaseModel):
-    name = Column(Unicode)
+    name = Column(Unicode, unique=True)
     messages = relationship(Message, backref='participant_message')
     chats = relationship('Chat', secondary='link')
 
@@ -70,14 +70,18 @@ class Link(BaseModel):
     chat_id = Column(Integer, ForeignKey('chat.id'))
     participant_id = Column(Integer, ForeignKey('participant.id'))
 
-    chat = relationship(Chat, backref=backref('link', cascade="all, delete-orphan"))
-    participant = relationship(Participant, backref=backref('link', cascade="all, delete-orphan"))
+    chat = relationship(Chat, backref=backref('link', cascade='all, delete-orphan'))
+    participant = relationship(Participant, backref=backref('link', cascade='all, delete-orphan'))
+
+    __mapper_args__ = {
+        'confirm_deleted_rows': False
+    }
 
 
 class Db(object):
     def __init__(self):
-        engine = create_engine(f'sqlite:///:memory:', echo=False)
-        #engine = create_engine(f'sqlite:///test.db', echo=False)
+        #engine = create_engine(f'sqlite:///:memory:', echo=False)
+        engine = create_engine(f'sqlite:///test.db', echo=False)
         _session = sessionmaker(bind=engine)
         self.session = _session()
         BaseModel.metadata.create_all(engine)
@@ -112,6 +116,9 @@ class Db(object):
     def commit(self):
         self.session.flush()
         self.session.commit()
+
+    def delete(self, item):
+        self.session.delete(item)
 
 
 db = Db()
