@@ -5,20 +5,19 @@ from PySide2.QtWidgets import QStyleFactory
 from database import db, Chat
 
 
-class Window(QtWidgets.QMainWindow):
-    def __init__(self, chat):
-        super().__init__()
-
-        print(chat)
+class Window(QtWidgets.QMainWindow, QtGui.QWindow):
+    def __init__(self, parent=None, chat=None):
+        super(Window, self).__init__(parent)
 
         self.setWindowTitle('Chateen - konverzace')
-        #self.setGeometry(300, 300, 300, 300)
+        self.setGeometry(300, 300, 300, 300)
         self.center_window()
 
         self.vbox = QtWidgets.QVBoxLayout()
         self.setLayout(self.vbox)
 
         self.create_table(chat)
+        self.show()
 
     def center_window(self):
         rectangle = self.frameGeometry()
@@ -52,7 +51,8 @@ class Window(QtWidgets.QMainWindow):
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        self.setWindowTitle('Chateen - konverzace')
+        self.setWindowTitle('Chateen - skupiny')
+        self.setGeometry(300, 300, 600, 600)
         self.create_table()
 
     def create_table(self):
@@ -94,10 +94,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.table)
 
     def fce(self, chat):
-        print(chat)
-        win = Window(chat)
-        win.show()
-        win.exec_()
+        win = Window(self, chat)
+        win.create()
+        # win.exec_()
 
 
 if __name__ == '__main__':
@@ -105,4 +104,5 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     w = MainWindow()
     w.show()
+    # app.setFont(QtGui.QFont.family.)
     sys.exit(app.exec_())
