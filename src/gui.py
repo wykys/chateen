@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 import sys
-from PySide2.QtWidgets import (QApplication, QWidget, QDialog, QPushButton, QLineEdit,
-                               QVBoxLayout, QFileDialog, QDesktopWidget, QGroupBox, QRadioButton, QCompleter, QMessageBox, QT)
+from PySide2 import QtWidgets
 from loader_fb import FbLoader
 from loader_ig import IgLoader
 
 
-class Window(QWidget):
+class Window(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
@@ -17,28 +16,28 @@ class Window(QWidget):
         self.setGeometry(300, 300, 300, 300)
         self.center_window()
 
-        self.vbox = QVBoxLayout()
+        self.vbox = QtWidgets.QVBoxLayout()
         self.setLayout(self.vbox)
         self.create_load_ui()
 
     def center_window(self):
         rectangle = self.frameGeometry()
-        center_point = QDesktopWidget().availableGeometry().center()
+        center_point = QtWidgets.QDesktopWidget().availableGeometry().center()
         rectangle.moveCenter(center_point)
         self.move(rectangle.topLeft())
 
     def create_load_ui(self):
-        group_box = QGroupBox('Načti data')
+        group_box = QtWidgets.QGroupBox('Načti data')
 
-        self.radio_ig = QRadioButton('Instagram')
-        self.radio_fb = QRadioButton('Facebook')
+        self.radio_ig = QtWidgets.QRadioButton('Instagram')
+        self.radio_fb = QtWidgets.QRadioButton('Facebook')
 
         self.radio_ig.setChecked(True)
 
-        button = QPushButton('Vyber JSON')
+        button = QtWidgets.QPushButton('Vyber JSON')
         button.clicked.connect(self.load_json)
 
-        vbox = QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self.radio_ig)
         vbox.addWidget(self.radio_fb)
         vbox.addWidget(button)
@@ -48,7 +47,8 @@ class Window(QWidget):
         self.vbox.addWidget(group_box)
 
     def load_json(self):
-        path, _ = QFileDialog.getOpenFileName(self, filter='JSON (*.json *.JSON)', caption='Open JSON', dir='../data')
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self, filter='JSON (*.json *.JSON)', caption='Open JSON', dir='../data')
 
         if self.radio_ig.isChecked():
             self.corpus = IgLoader(path).corpus
@@ -64,10 +64,10 @@ class Window(QWidget):
         self.participant = QLineEdit()
         self.participant.setCompleter(completer)
 
-        button = QPushButton('Vyber konverzace')
+        button = QtWidgets.QPushButton('Vyber konverzace')
         button.clicked.connect(self.create_chat_ui)
 
-        vbox = QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self.participant)
         vbox.addWidget(button)
         vbox.addStretch(1)
@@ -85,16 +85,16 @@ class Window(QWidget):
             msg.exec()
             return
 
-        group_box = QGroupBox('Vyber konverzace k exportu')
+        group_box = QtWidgets.QGroupBox('Vyber konverzace k exportu')
 
-        completer = QCompleter(self.corpus.get_participants())
+        completer = QtWidgets.QCompleter(self.corpus.get_participants())
         self.participant = QLineEdit()
         self.participant.setCompleter(completer)
 
-        button = QPushButton('Vyber konverzace')
+        button = QtWidgets.QPushButton('Vyber konverzace')
         button.clicked.connect(self.create_chat_ui)
 
-        vbox = QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self.participant)
         vbox.addWidget(button)
         vbox.addStretch(1)
@@ -107,7 +107,7 @@ class Window(QWidget):
 
 class GUI(object):
     def __init__(self):
-        app = QApplication(sys.argv)
+        app = QtWidgets.QApplication(sys.argv)
         win = Window()
         win.show()
         sys.exit(app.exec_())

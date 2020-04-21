@@ -46,7 +46,6 @@ class WinParticipant(QtWidgets.QMainWindow, QtGui.QWindow):
                 self.table.setItem(r, c, item)
 
 
-
         self.setCentralWidget(self.table)
 
     def button_click(self, participant):
@@ -159,8 +158,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def button_click(self, chat):
         WinMessages(self, chat)
-
-
 
 
 if __name__ == '__main__':
