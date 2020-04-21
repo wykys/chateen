@@ -132,6 +132,7 @@ dmypy.json
 # test
 data/
 out/
+*.db
 
 # VS Code
 .vscode/
