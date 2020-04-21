@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-from PySide2.QtWidgets import QApplication, QWidget, QDialog, QPushButton, QLineEdit, QVBoxLayout, QFileDialog, QDesktopWidget, QGroupBox, QRadioButton, QCompleter
+from PySide2.QtWidgets import (QApplication, QWidget, QDialog, QPushButton, QLineEdit,
+                               QVBoxLayout, QFileDialog, QDesktopWidget, QGroupBox, QRadioButton, QCompleter, QMessageBox, QT)
 from loader_fb import FbLoader
 from loader_ig import IgLoader
 
@@ -17,8 +18,8 @@ class Window(QWidget):
         self.center_window()
 
         self.vbox = QVBoxLayout()
-        self.create_load_ui()
         self.setLayout(self.vbox)
+        self.create_load_ui()
 
     def center_window(self):
         rectangle = self.frameGeometry()
@@ -54,7 +55,6 @@ class Window(QWidget):
         else:
             self.corpus = FbLoader(path).corpus
 
-        self.corpus.show()
         self.create_participant_ui()
 
     def create_participant_ui(self):
@@ -64,12 +64,45 @@ class Window(QWidget):
         self.participant = QLineEdit()
         self.participant.setCompleter(completer)
 
+        button = QPushButton('Vyber konverzace')
+        button.clicked.connect(self.create_chat_ui)
+
         vbox = QVBoxLayout()
         vbox.addWidget(self.participant)
+        vbox.addWidget(button)
         vbox.addStretch(1)
 
         group_box.setLayout(vbox)
         self.vbox.addWidget(group_box)
+
+    def create_chat_ui(self):
+        if not self.participant.text() in self.corpus.get_participants():
+            msg = QMessageBox()
+            msg.setText('Zadané jméno není platné.')
+            msg.setIcon(QMessageBox.Icon.Warning)
+            msg.setWindowTitle('Chateen varování')
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec()
+            return
+
+        group_box = QGroupBox('Vyber konverzace k exportu')
+
+        completer = QCompleter(self.corpus.get_participants())
+        self.participant = QLineEdit()
+        self.participant.setCompleter(completer)
+
+        button = QPushButton('Vyber konverzace')
+        button.clicked.connect(self.create_chat_ui)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.participant)
+        vbox.addWidget(button)
+        vbox.addStretch(1)
+
+        group_box.setLayout(vbox)
+        self.vbox.addWidget(group_box)
+
+
 
 
 class GUI(object):
