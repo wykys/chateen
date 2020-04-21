@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
 import sys
-from PySide2 import QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
+from gui_prototype import AppPrototype
+
 from loader_fb import FbLoader
 from loader_ig import IgLoader
 
 
 class Window(QtWidgets.QWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super(Window, self).__init__(parent)
 
         self.corpus = None
 
@@ -103,14 +105,14 @@ class Window(QtWidgets.QWidget):
         self.vbox.addWidget(group_box)
 
 
-
-
-class GUI(object):
+class GUI(AppPrototype):
     def __init__(self):
-        app = QtWidgets.QApplication(sys.argv)
+        super(GUI, self).__init__()
+
         win = Window()
         win.show()
-        sys.exit(app.exec_())
+
+        self.run()
 
 
 if __name__ == '__main__':
