@@ -26,18 +26,34 @@ class IgLoader(LoaderPrototype):
 
                 for name in data['participants']:
                     participant = db.get_participant(name)
+                    if name == '__karin_kaa_':
+                        print('TUUU v participants')
+                        print(participant)
+
                     if participant is None:
                         participant = db.new_participant()
                         participant.name = name
+                        participant.chats.append(chat)
+                        chat.participants.append(participant)
                         db.add(participant)
-
-                    participant.chats.append(chat)
-                    chat.participants.append(participant)
-                    db.commit()
+                        db.commit()
+                    else:
+                        participant.chats.append(chat)
+                        chat.participants.append(participant)
+                        db.commit()
 
                 for message in data['conversation']:
                     if 'text' in message and 'sender' in message:
                         participant = db.get_participant(message['sender'])
+                        # blocked user
+                        if participant is None:
+                            participant = db.new_participant()
+                            participant.name = message['sender']
+                            participant.chats.append(chat)
+                            chat.participants.append(participant)
+                            db.add(participant)
+                            db.commit()
+
                         msg = db.new_message()
                         msg.chat = chat
                         msg.participant = participant
