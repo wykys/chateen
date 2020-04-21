@@ -49,7 +49,7 @@ class Participant(BaseModel):
         return len(self.messages)
 
     def __repr__(self):
-        return f'Participant: {self.name}'
+        return self.name
 
 
 class Chat(BaseModel):
