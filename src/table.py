@@ -5,9 +5,58 @@ from PySide2.QtWidgets import QStyleFactory
 from database import db, Chat
 
 
-class Window(QtWidgets.QMainWindow, QtGui.QWindow):
+class WinParticipant(QtWidgets.QMainWindow, QtGui.QWindow):
+    def __init__(self, parent=None, participant=None):
+        super(WinParticipant, self).__init__(parent)
+
+        self.setWindowTitle(f'Chateen - {participant.name}')
+        self.setGeometry(300, 300, 300, 300)
+        self.center_window()
+
+        self.vbox = QtWidgets.QVBoxLayout()
+        self.setLayout(self.vbox)
+
+        self.create_table(participant)
+        self.show()
+
+    def center_window(self):
+        rectangle = self.frameGeometry()
+        center_point = QtWidgets.QDesktopWidget().availableGeometry().center()
+        rectangle.moveCenter(center_point)
+        self.move(rectangle.topLeft())
+
+    def create_table(self, participant):
+        self.table = QtWidgets.QTableWidget(0, 3)
+        self.table.setHorizontalHeaderLabels(
+            ['Datum', 'Odesilatel', 'Text']
+        )
+
+        for r, message in enumerate(participant.messages):
+
+            item1 = QtWidgets.QTableWidgetItem(message.datetime.strftime('%H:%M:%S    %Y/%m/%d'))
+            item1.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+
+            item2 = QtWidgets.QTableWidgetItem(str(message.participant))
+            item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+            item3 = QtWidgets.QTableWidgetItem(str(message.text))
+
+            self.table.insertRow(self.table.rowCount())
+            for c, item in enumerate([item1, item2, item3]):
+                self.table.setItem(r, c, item)
+
+
+
+        self.setCentralWidget(self.table)
+
+    def button_click(self, participant):
+        #WinMessages(self, participant)
+        pass
+
+
+class WinMessages(QtWidgets.QMainWindow, QtGui.QWindow):
     def __init__(self, parent=None, chat=None):
-        super(Window, self).__init__(parent)
+        super(WinMessages, self).__init__(parent)
 
         self.setWindowTitle('Chateen - konverzace')
         self.setGeometry(300, 300, 300, 300)
@@ -26,9 +75,9 @@ class Window(QtWidgets.QMainWindow, QtGui.QWindow):
         self.move(rectangle.topLeft())
 
     def create_table(self, chat):
-        self.table = QtWidgets.QTableWidget(0, 3)
+        self.table = QtWidgets.QTableWidget(0, 4)
         self.table.setHorizontalHeaderLabels(
-            ['Datum', 'Odesilatel', 'Text']
+            ['Datum', 'Odesilatel', 'Text', 'Více']
         )
 
         for r, message in enumerate(chat.messages):
@@ -45,7 +94,22 @@ class Window(QtWidgets.QMainWindow, QtGui.QWindow):
             for c, item in enumerate([item1, item2, item3]):
                 self.table.setItem(r, c, item)
 
+            layout = QtWidgets.QHBoxLayout()
+            layout.setContentsMargins(0, 0, 0, 0)
+            button = QtWidgets.QPushButton('...')
+            button.clicked.connect(lambda y=0, x=message.participant: self.button_click(x))
+            layout.addWidget(button)
+
+            item4 = QtWidgets.QWidget()
+            item4.setLayout(layout)
+
+            self.table.setCellWidget(r, 3, item4)
+
         self.setCentralWidget(self.table)
+
+    def button_click(self, participant):
+        WinParticipant(self, participant)
+        pass
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -79,7 +143,7 @@ class MainWindow(QtWidgets.QMainWindow):
             layout = QtWidgets.QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
             button = QtWidgets.QPushButton('...')
-            button.clicked.connect(lambda y=0, x=chat: self.fce(x))
+            button.clicked.connect(lambda y=0, x=chat: self.button_click(x))
             layout.addWidget(button)
 
             item5 = QtWidgets.QWidget()
@@ -93,10 +157,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.setCentralWidget(self.table)
 
-    def fce(self, chat):
-        win = Window(self, chat)
-        win.create()
-        # win.exec_()
+    def button_click(self, chat):
+        WinMessages(self, chat)
+
+
 
 
 if __name__ == '__main__':
