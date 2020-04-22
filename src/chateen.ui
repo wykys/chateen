@@ -91,7 +91,7 @@
            <item>
             <widget class="QRadioButton" name="radio_button_one">
              <property name="text">
-              <string>Jedinec</string>
+              <string>Já</string>
              </property>
              <property name="checked">
               <bool>false</bool>
@@ -327,38 +327,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>checkbox_from</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>date_from</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>578</x>
-     <y>201</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>728</x>
-     <y>201</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkbox_to</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>date_to</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>577</x>
-     <y>233</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>728</x>
-     <y>233</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>radio_button_one</sender>
    <signal>toggled(bool)</signal>
    <receiver>line_edit_participant</receiver>
@@ -387,6 +355,38 @@
     <hint type="destinationlabel">
      <x>441</x>
      <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkbox_from</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>date_from</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>578</x>
+     <y>201</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>728</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkbox_to</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>date_to</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>577</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>728</x>
+     <y>233</y>
     </hint>
    </hints>
   </connection>

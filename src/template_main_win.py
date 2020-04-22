@@ -206,10 +206,10 @@ class Ui_MainWindow(object):
         self.tools.addAction(self.reduce)
 
         self.retranslateUi(MainWindow)
-        self.checkbox_from.clicked.connect(self.date_from.setEnabled)
-        self.checkbox_to.clicked.connect(self.date_to.setEnabled)
         self.radio_button_one.toggled.connect(self.line_edit_participant.setEnabled)
         self.open.triggered.connect(MainWindow.menu_file_open)
+        self.checkbox_from.toggled.connect(self.date_from.setEnabled)
+        self.checkbox_to.toggled.connect(self.date_to.setEnabled)
 
         self.tabwidget.setCurrentIndex(0)
 
@@ -240,7 +240,7 @@ class Ui_MainWindow(object):
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_more), QCoreApplication.translate("MainWindow", u"V\u00edce", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Kdo poskytene data?", None))
         self.radio_button_all.setText(QCoreApplication.translate("MainWindow", u"V\u0161ichni \u00fa\u010dastn\u00edci", None))
-        self.radio_button_one.setText(QCoreApplication.translate("MainWindow", u"Jedinec", None))
+        self.radio_button_one.setText(QCoreApplication.translate("MainWindow", u"J\u00e1", None))
 #if QT_CONFIG(tooltip)
         self.line_edit_participant.setToolTip(QCoreApplication.translate("MainWindow", u"\u00da\u010dastn\u00edku, zadejte sv\u00e9 jm\u00e9no.", None))
 #endif // QT_CONFIG(tooltip)
