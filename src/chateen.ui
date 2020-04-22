@@ -331,26 +331,29 @@
     <property name="toolTipsVisible">
      <bool>true</bool>
     </property>
-    <addaction name="open"/>
+    <addaction name="menu_file_open"/>
+    <addaction name="menu_file_open_fb"/>
+    <addaction name="menu_file_open_ig"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Nápověda</string>
     </property>
-    <addaction name="help"/>
-    <addaction name="about"/>
+    <addaction name="menu_help"/>
+    <addaction name="menu_about"/>
    </widget>
    <widget class="QMenu" name="tools">
     <property name="title">
      <string>Nástroje</string>
     </property>
-    <addaction name="reduce"/>
+    <addaction name="menu_tools_reduce"/>
+    <addaction name="menu_tools_clean"/>
    </widget>
    <addaction name="file"/>
-   <addaction name="menuHelp"/>
    <addaction name="tools"/>
+   <addaction name="menuHelp"/>
   </widget>
-  <action name="open">
+  <action name="menu_file_open">
    <property name="text">
     <string>Otevřít</string>
    </property>
@@ -364,7 +367,7 @@
     <enum>Qt::WidgetShortcut</enum>
    </property>
   </action>
-  <action name="help">
+  <action name="menu_help">
    <property name="text">
     <string>Nápověda programu</string>
    </property>
@@ -375,14 +378,29 @@
     <string>F1</string>
    </property>
   </action>
-  <action name="about">
+  <action name="menu_about">
    <property name="text">
     <string>O projektu</string>
    </property>
   </action>
-  <action name="reduce">
+  <action name="menu_tools_reduce">
    <property name="text">
     <string>Fejkař Otto</string>
+   </property>
+  </action>
+  <action name="menu_file_open_fb">
+   <property name="text">
+    <string>Otevřít Facebook</string>
+   </property>
+  </action>
+  <action name="menu_file_open_ig">
+   <property name="text">
+    <string>Otevřít Instagram</string>
+   </property>
+  </action>
+  <action name="menu_tools_clean">
+   <property name="text">
+    <string>Vymazat</string>
    </property>
   </action>
  </widget>
@@ -405,10 +423,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>open</sender>
+   <sender>menu_file_open</sender>
    <signal>triggered(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>menu_file_open()</slot>
+   <slot>action_menu_file_open()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -484,8 +502,76 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>menu_file_open_fb</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_menu_file_open_fb()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>menu_file_open_ig</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_menu_file_open_ig()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>menu_tools_clean</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_menu_tools_clean()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>menu_tools_reduce</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_menu_tools_reduce()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>menu_file_open()</slot>
+  <slot>action_menu_file_open()</slot>
+  <slot>action_menu_file_open_fb()</slot>
+  <slot>action_menu_file_open_ig()</slot>
+  <slot>action_menu_tools_clean()</slot>
+  <slot>action_menu_tools_reduce()</slot>
  </slots>
 </ui>

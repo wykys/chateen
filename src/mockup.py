@@ -19,9 +19,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         completer = QtWidgets.QCompleter(names)
         self.line_edit_participant.setCompleter(completer)
 
-    def menu_file_open(self):
+    def action_menu_file_open(self):
         self.update_table()
         self.set_completer_name()
+
+    def action_menu_file_open_fb(self):
+        pass
+
+    def action_menu_file_open_ig(self):
+        pass
+
+    def action_menu_tools_reduce(self):
+        pass
+
+    def action_menu_tools_clean(self):
+        pass
+
 
     def update_table(self):
         self.update_table_chats()
