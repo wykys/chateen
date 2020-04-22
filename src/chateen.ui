@@ -20,7 +20,10 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTabWidget" name="tabwidget_main">
+      <widget class="QTabWidget" name="tabwidget">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -30,7 +33,7 @@
        <property name="movable">
         <bool>false</bool>
        </property>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="tab_chats">
         <attribute name="title">
          <string>Chaty</string>
         </attribute>
@@ -40,13 +43,26 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="QWidget" name="tab_participants">
         <attribute name="title">
          <string>Účastníci</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QTableWidget" name="table_participants"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_more">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <attribute name="title">
+         <string>Více</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QTableWidget" name="table_more"/>
          </item>
         </layout>
        </widget>
@@ -214,7 +230,7 @@
         <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
-           <string>Přispět na oltář vědy</string>
+           <string>Přispěte na oltář vědy.</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
@@ -353,8 +369,8 @@
    <slot>menu_file_open()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>161</x>
-     <y>68</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>441</x>

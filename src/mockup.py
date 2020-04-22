@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-# pip3 install pyqt5
-# pyuic5 path_to_your_ui_file -o path_to_the_output_python_file
+
 
 from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
 
 from template_main_win import Ui_MainWindow
-from database import db, Chat, Participant
+from database import db
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -17,12 +16,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_table()
 
     def menu_file_open(self):
-        print('Ahoj')
         self.update_table()
 
     def update_table(self):
         self.update_table_chats()
         self.update_table_participants()
+
+    def table_chat_button_click(self, chat):
+        self.update_table_chat_detail(chat)
+        self.tabwidget.setCurrentWidget(self.tab_more)
+
+    def table_participant_button_click(self, chat):
+        self.update_table_chat_detail(chat)
+        self.tabwidget.setCurrentWidget(self.tab_more)
 
     def update_table_chats(self):
 
@@ -30,6 +36,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_chats.clearContents()
         self.table_chats.setRowCount(0)
         self.table_chats.setSortingEnabled(True)
+        self.update_table_participant_detail(db.get_participants().first())
 
         self.table_chats.setHorizontalHeaderLabels(
             ['Zpracovat', 'Počet zpráv', 'Počet účastníků', 'Účastníci', 'Více']
@@ -57,7 +64,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             layout = QtWidgets.QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
             button = QtWidgets.QPushButton('...')
-            button.clicked.connect(lambda y=0, x=chat: self.button_click(x))
+            button.clicked.connect(lambda y=0, x=chat: self.table_chat_button_click(x))
             layout.addWidget(button)
 
             item5 = QtWidgets.QWidget()
@@ -104,7 +111,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             layout = QtWidgets.QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
             button = QtWidgets.QPushButton('...')
-            button.clicked.connect(lambda y=0, x=participant: self.button_click(x))
+            button.clicked.connect(lambda y=0, x=participant: self.table_participant_button_click(x))
             layout.addWidget(button)
 
             item4 = QtWidgets.QWidget()
@@ -122,12 +129,83 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.table_participants.setColumnWidth(3, 20)
 
-    def button_click(self, chat):
-        WinMessages(self, chat)
+    def update_table_chat_detail(self, chat):
 
+        self.table_more.setColumnCount(4)
+        self.table_more.clearContents()
+        self.table_more.setRowCount(0)
+        self.table_more.setSortingEnabled(True)
 
-class UiWinFactory(object):
-    pass
+        self.table_more.setHorizontalHeaderLabels(
+            ['Datum', 'Odesilatel', 'Text', 'Více']
+        )
+
+        for r, message in enumerate(chat.messages):
+
+            item1 = QtWidgets.QTableWidgetItem(message.datetime.strftime('%H:%M:%S    %Y/%m/%d'))
+            item1.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            item1.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+
+            item2 = QtWidgets.QTableWidgetItem(str(message.participant))
+            item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+            item2.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+
+            item3 = QtWidgets.QTableWidgetItem(str(message.text))
+            item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+
+            self.table_more.insertRow(self.table_more.rowCount())
+            for c, item in enumerate([item1, item2, item3]):
+                self.table_more.setItem(r, c, item)
+
+            layout = QtWidgets.QHBoxLayout()
+            layout.setContentsMargins(0, 0, 0, 0)
+            button = QtWidgets.QPushButton('...')
+            button.clicked.connect(lambda y=0, x=message.participant: self.table_participant_button_click(x))
+            layout.addWidget(button)
+
+            item4 = QtWidgets.QWidget()
+            item4.setLayout(layout)
+
+            self.table_more.setCellWidget(r, 3, item4)
+
+        self.table_more.setColumnWidth(0, 100)
+        header = self.table_more.horizontalHeader()
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+        self.table_more.setColumnWidth(3, 20)
+
+    def update_table_participant_detail(self, participant):
+
+        self.table_more.setColumnCount(3)
+        self.table_more.clearContents()
+        self.table_more.setRowCount(0)
+        self.table_more.setSortingEnabled(True)
+
+        self.table_more.setHorizontalHeaderLabels(
+            ['Datum', 'Odesilatel', 'Text']
+        )
+
+        for r, message in enumerate(participant.messages):
+
+            item1 = QtWidgets.QTableWidgetItem(message.datetime.strftime('%H:%M:%S    %Y/%m/%d'))
+            item1.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            item1.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+
+            item2 = QtWidgets.QTableWidgetItem(str(message.participant))
+            item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+            item2.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+
+            item3 = QtWidgets.QTableWidgetItem(str(message.text))
+            item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+
+            self.table_more.insertRow(self.table_more.rowCount())
+            for c, item in enumerate([item1, item2, item3]):
+                self.table_more.setItem(r, c, item)
+
+        self.table_more.setColumnWidth(0, 100)
+        header = self.table_more.horizontalHeader()
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
 
 if __name__ == '__main__':
