@@ -5,6 +5,8 @@ from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
 
 from template_main_win import Ui_MainWindow
 from database import db
+from loader_fb import FbLoader
+from loader_ig import IgLoader
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -19,22 +21,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         completer = QtWidgets.QCompleter(names)
         self.line_edit_participant.setCompleter(completer)
 
-    def action_menu_file_open(self):
+    def load_new_data(self):
         self.update_table()
         self.set_completer_name()
 
+    def action_menu_file_open(self):
+        self.load_new_data()
+
     def action_menu_file_open_fb(self):
-        pass
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self, filter='Facebook JSON (*.json *.JSON)', caption='Open Facebook JSON', dir='../data'
+        )
+        FbLoader(path)
+        self.load_new_data()
 
     def action_menu_file_open_ig(self):
-        pass
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self, filter='Instagram JSON (*.json *.JSON)', caption='Open Instagram JSON', dir='../data'
+        )
+        IgLoader(path)
+        self.load_new_data()
 
     def action_menu_tools_reduce(self):
         pass
 
     def action_menu_tools_clean(self):
         pass
-
 
     def update_table(self):
         self.update_table_chats()
