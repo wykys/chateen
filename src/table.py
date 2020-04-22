@@ -3,6 +3,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import QStyleFactory
 from database import db, Chat
+from gui_prototype import AppPrototype
 
 
 class WinParticipant(QtWidgets.QMainWindow, QtGui.QWindow):
@@ -160,10 +161,16 @@ class MainWindow(QtWidgets.QMainWindow):
         WinMessages(self, chat)
 
 
+class GUI(AppPrototype):
+    def __init__(self):
+        super(GUI, self).__init__()
+
+        win = MainWindow()
+        win.show()
+
+        self.run()
+
+
+
 if __name__ == '__main__':
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    w = MainWindow()
-    w.show()
-    # app.setFont(QtGui.QFont.family.)
-    sys.exit(app.exec_())
+    GUI()
