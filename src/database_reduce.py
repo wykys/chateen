@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # wykys 2020
 
 from database_models import Link
@@ -83,7 +82,3 @@ class DbReduce(object):
 
             self.db.delete(chat)
             self.db.commit()
-
-
-if __name__ == '__main__':
-    Corpus()
