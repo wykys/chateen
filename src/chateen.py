@@ -17,6 +17,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle('Chateen')
+        self.load_new_data()
 
     def set_completer_name(self):
         names = list([n.name for n in db.get_participants().all()])
@@ -63,11 +64,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_table_participants()
         self.update_table_participant_detail(None)
 
-    def click_table_chat_button(self, chat):
+    def callback_click_table_chat_button(self, chat):
         self.update_table_chat_detail(chat)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
-    def click_table_participant_button(self, participant):
+    def callback_click_table_participant_button(self, participant):
         self.update_table_participant_detail(participant)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
@@ -88,6 +89,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def update_table_participant_detail(self, participant):
         if not participant is None:
             tables.update_table_participant_detail(self, participant)
+
+    def callback_table_itam_changed(self, row, column):
+        item = self.table_chats.item(row, column)
+        tables.checkbox_decorator(item)
 
 
 if __name__ == '__main__':

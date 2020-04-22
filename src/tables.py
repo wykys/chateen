@@ -15,10 +15,10 @@ def create_table_button(self, callback, arg):
     return item
 
 
-def insert_row(self, row, items):
+def insert_row(self, row, items, offset=0):
     self.insertRow(self.rowCount())
     for cell, item in enumerate(items):
-        self.setItem(row, cell, item)
+        self.setItem(row, cell+offset, item)
 
 
 def init(self, columns):
@@ -51,6 +51,15 @@ def set_columns_width(self, columns):
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
 
+def checkbox_decorator(item):
+    if bool(item.checkState()):
+        item.setText('Ano')
+        item.setTextColor(QtGui.QColor(0, 150, 0))
+    else:
+        item.setText('Ne')
+        item.setTextColor(QtGui.QColor(200, 0, 0))
+
+
 def update_table_chats(self, chats):
 
     init(self.table_chats, 5)
@@ -62,28 +71,33 @@ def update_table_chats(self, chats):
     for r, chat in enumerate(chats):
 
         item1 = QtWidgets.QTableWidgetItem()
+        item1.setText('Ne')
         item1.setFlags(item1.flags() | QtCore.Qt.ItemIsUserCheckable)
         item1.setCheckState(QtCore.Qt.Unchecked)
         item1.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
         item1.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        checkbox_decorator(item1)
 
         item2 = QtWidgets.QTableWidgetItem(str(chat.get_cnt_messages()))
         item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        item2.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item2.setFlags(item2.flags() & ~QtCore.Qt.ItemIsEditable)
 
         item3 = QtWidgets.QTableWidgetItem(str(chat.get_cnt_participants()))
         item3.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item3.setFlags(item2.flags() & ~QtCore.Qt.ItemIsEditable)
 
         item4 = QtWidgets.QTableWidgetItem(str(chat.participants)[1:-1])
-        item4.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item4.setFlags(item2.flags() & ~QtCore.Qt.ItemIsEditable)
 
         insert_row(self.table_chats, r, [item1, item2, item3, item4])
 
-        item5 = create_table_button(self.table_chats, self.click_table_chat_button, chat)
+        item5 = create_table_button(self.table_chats, self.callback_click_table_chat_button, chat)
         self.table_chats.setCellWidget(r, 4, item5)
 
+
     set_columns_width(self.table_chats, 5)
+
+    self.table_chats.cellChanged.connect(self.callback_table_itam_changed)
 
 
 def update_table_participants(self, participants):
@@ -102,15 +116,15 @@ def update_table_participants(self, participants):
 
         item2 = QtWidgets.QTableWidgetItem(str(participant.get_cnt_messages()))
         item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        item2.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item2.setFlags(item2.flags() & ~QtCore.Qt.ItemIsEditable)
 
         item3 = QtWidgets.QTableWidgetItem(str(participant.get_cnt_chats()))
         item3.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item3.setFlags(item3.flags() & ~QtCore.Qt.ItemIsEditable)
 
         insert_row(self.table_participants, r, [item1, item2, item3])
 
-        item4 = create_table_button(self.table_participants, self.click_table_participant_button, participant)
+        item4 = create_table_button(self.table_participants, self.callback_click_table_participant_button, participant)
         self.table_participants.setCellWidget(r, 3, item4)
 
     set_columns_width(self.table_participants, 4)
@@ -132,14 +146,15 @@ def update_table_chat_detail(self, chat):
 
         item2 = QtWidgets.QTableWidgetItem(str(message.participant))
         item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        item2.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item2.setFlags(item2.flags() & ~QtCore.Qt.ItemIsEditable)
 
         item3 = QtWidgets.QTableWidgetItem(str(message.text))
-        item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item3.setFlags(item3.flags() & ~QtCore.Qt.ItemIsEditable)
 
         insert_row(self.table_more, r, [item1, item2, item3])
 
-        item4 = create_table_button(self.table_participants, self.click_table_participant_button, message.participant)
+        item4 = create_table_button(self.table_participants,
+                                    self.callback_click_table_participant_button, message.participant)
         self.table_more.setCellWidget(r, 3, item4)
 
     set_columns_width(self.table_more, 4)
@@ -161,10 +176,10 @@ def update_table_participant_detail(self, participant) -> bool:
 
         item2 = QtWidgets.QTableWidgetItem(str(message.participant))
         item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        item2.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item2.setFlags(item2.flags() & ~QtCore.Qt.ItemIsEditable)
 
         item3 = QtWidgets.QTableWidgetItem(str(message.text))
-        item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
+        item3.setFlags(item3.flags() & ~QtCore.Qt.ItemIsEditable)
 
         insert_row(self.table_more, r, [item1, item2, item3])
 
