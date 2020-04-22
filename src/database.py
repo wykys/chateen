@@ -8,74 +8,8 @@ from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarativ
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, backref
 
-from uuid import uuid4
-
-
-def new_id():
-    return uuid4().int
-
-
-@as_declarative()
-class BaseModel(object):
-    @declared_attr
-    def __tablename__(cls):
-        return cls.__name__.lower()
-    id = Column(Integer, primary_key=True)
-
-
-class Message(BaseModel):
-    text = Column(Unicode)
-    datetime = Column(DateTime)
-
-    chat = relationship('Chat')
-    participant = relationship('Participant')
-
-    chat_id = Column(Integer, ForeignKey('chat.id'))
-    participant_id = Column(Integer, ForeignKey('participant.id'))
-
-    def __repr__(self):
-        return f'Message: {self.text}'
-
-
-class Participant(BaseModel):
-    name = Column(Unicode, unique=True)
-    messages = relationship(Message, backref='participant_message')
-    chats = relationship('Chat', secondary='link')
-
-    def get_cnt_chats(self):
-        return len(self.chats)
-
-    def get_cnt_messages(self):
-        return len(self.messages)
-
-    def __repr__(self):
-        return self.name
-
-
-class Chat(BaseModel):
-    messages = relationship(Message, backref='chat_messege')
-    participants = relationship(Participant, secondary='link')
-
-    def get_cnt_messages(self):
-        return len(self.messages)
-
-    def get_cnt_participants(self):
-        return len(self.participants)
-
-    def __repr__(self):
-        return f'Chat: {self.id}'
-
-
-class Link(BaseModel):
-    chat_id = Column(Integer, ForeignKey('chat.id'))
-    participant_id = Column(Integer, ForeignKey('participant.id'))
-
-    chat = relationship(Chat, backref=backref('link', cascade='all, delete-orphan'))
-    participant = relationship(Participant, backref=backref('link', cascade='all, delete-orphan'))
-
-    __mapper_args__ = {
-        'confirm_deleted_rows': False
-    }
+from database_models import BaseModel, Chat, Participant, Message, Link
+from database_reduce import DbReduce
 
 
 class Db(object):
@@ -119,6 +53,12 @@ class Db(object):
 
     def delete(self, item):
         self.session.delete(item)
+
+    def delete_all(self):
+        self.__init__()
+
+    def reduce(self):
+        DbReduce(self)
 
 
 db = Db()
