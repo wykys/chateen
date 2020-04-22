@@ -202,6 +202,23 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.group_date)
 
+        self.groupbox_select = QGroupBox(self.widget_right)
+        self.groupbox_select.setObjectName(u"groupbox_select")
+        self.verticalLayout_10 = QVBoxLayout(self.groupbox_select)
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.btn_select_all = QPushButton(self.groupbox_select)
+        self.btn_select_all.setObjectName(u"btn_select_all")
+
+        self.verticalLayout_10.addWidget(self.btn_select_all)
+
+        self.btn_deselect_all = QPushButton(self.groupbox_select)
+        self.btn_deselect_all.setObjectName(u"btn_deselect_all")
+
+        self.verticalLayout_10.addWidget(self.btn_deselect_all)
+
+
+        self.verticalLayout_2.addWidget(self.groupbox_select)
+
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_2)
@@ -261,8 +278,9 @@ class Ui_MainWindow(object):
         self.menu_file_open_ig.triggered.connect(MainWindow.callback_menu_file_open_ig)
         self.menu_tools_clean.triggered.connect(MainWindow.callback_menu_tools_clean)
         self.menu_tools_reduce.triggered.connect(MainWindow.callback_menu_tools_reduce)
-        self.table_chats.cellChanged.connect(MainWindow.callback_table_chats_cell_changed)
         self.table_chats.cellClicked.connect(MainWindow.callback_table_chats_cell_clicked)
+        self.btn_select_all.clicked.connect(MainWindow.callback_btn_select_all_clicked)
+        self.btn_deselect_all.clicked.connect(MainWindow.callback_btn_deselect_all_clicked)
 
         self.tabwidget.setCurrentIndex(0)
 
@@ -307,6 +325,9 @@ class Ui_MainWindow(object):
         self.date_from.setDisplayFormat(QCoreApplication.translate("MainWindow", u"dd.MM.yyyy", None))
         self.checkbox_to.setText(QCoreApplication.translate("MainWindow", u"Do", None))
         self.date_to.setDisplayFormat(QCoreApplication.translate("MainWindow", u"dd.MM.yyyy", None))
+        self.groupbox_select.setTitle(QCoreApplication.translate("MainWindow", u"Pomocn\u00edk s v\u00fdb\u011bry.", None))
+        self.btn_select_all.setText(QCoreApplication.translate("MainWindow", u"Onzna\u010dit v\u0161e", None))
+        self.btn_deselect_all.setText(QCoreApplication.translate("MainWindow", u"Odzna\u010dit v\u0161e", None))
         self.group_export.setTitle(QCoreApplication.translate("MainWindow", u"P\u0159isp\u011bte na olt\u00e1\u0159 v\u011bdy.", None))
         self.btn_export.setText(QCoreApplication.translate("MainWindow", u"Exportovat", None))
         self.file.setTitle(QCoreApplication.translate("MainWindow", u"Soubor", None))

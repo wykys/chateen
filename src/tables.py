@@ -40,8 +40,8 @@ def set_columns_width(self, columns):
         header.setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
     elif columns == 4:
         header = self.horizontalHeader()
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.setColumnWidth(3, width_btn_more)
     elif columns == 3:

@@ -92,18 +92,39 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if not participant is None:
             tables.update_table_participant_detail(self, participant)
 
-    def callback_table_chats_cell_changed(self, row, column, toggle=False):
+    def callback_table_chats_cell_changed(self, row, column, toggle=False, value=None):
+        if toggle == False and value is None:
+            return
+        print('osp', row, column, toggle, value)
         item = self.table_chats.item(row, column)
+        self.table_chats.blockSignals(True)
         if toggle:
             if bool(item.checkState()):
                 item.setCheckState(QtCore.Qt.Unchecked)
             else:
                 item.setCheckState(QtCore.Qt.Checked)
+
+        if value == True:
+            item.setCheckState(QtCore.Qt.Checked)
+        elif value == False:
+            item.setCheckState(QtCore.Qt.Unchecked)
+
         tables.checkbox_decorator(item)
+        self.table_chats.blockSignals(False)
 
     def callback_table_chats_cell_clicked(self, row, column):
         self.callback_table_chats_cell_changed(row, 0, toggle=True)
+        print('k')
 
+    def callback_btn_select_all_clicked(self):
+        for row in range(self.table_chats.rowCount()):
+            self.callback_table_chats_cell_changed(row, 0, value=True)
+        print('g')
+
+    def callback_btn_deselect_all_clicked(self):
+        for row in range(self.table_chats.rowCount()):
+            self.callback_table_chats_cell_changed(row, 0, value=False)
+        print('b')
 
 
 if __name__ == '__main__':

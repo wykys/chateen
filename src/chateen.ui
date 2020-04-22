@@ -322,6 +322,29 @@
          </widget>
         </item>
         <item>
+         <widget class="QGroupBox" name="groupbox_select">
+          <property name="title">
+           <string>Pomocník s výběry.</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <widget class="QPushButton" name="btn_select_all">
+             <property name="text">
+              <string>Onznačit vše</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_deselect_all">
+             <property name="text">
+              <string>Odznačit vše</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -613,9 +636,9 @@
   </connection>
   <connection>
    <sender>table_chats</sender>
-   <signal>cellChanged(int,int)</signal>
+   <signal>cellClicked(int,int)</signal>
    <receiver>MainWindow</receiver>
-   <slot>callback_table_chats_cell_changed(int,int)</slot>
+   <slot>callback_table_chats_cell_clicked(int,int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>263</x>
@@ -628,14 +651,30 @@
    </hints>
   </connection>
   <connection>
-   <sender>table_chats</sender>
-   <signal>cellClicked(int,int)</signal>
+   <sender>btn_select_all</sender>
+   <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>callback_table_chats_cell_clicked(int,int)</slot>
+   <slot>callback_btn_select_all_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>263</x>
-     <y>285</y>
+     <x>702</x>
+     <y>301</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_deselect_all</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_btn_deselect_all_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>335</y>
     </hint>
     <hint type="destinationlabel">
      <x>441</x>
@@ -652,5 +691,7 @@
   <slot>callback_menu_tools_reduce()</slot>
   <slot>callback_table_chats_cell_changed(int,int)</slot>
   <slot>callback_table_chats_cell_clicked(int,int)</slot>
+  <slot>callback_btn_select_all_clicked()</slot>
+  <slot>callback_btn_deselect_all_clicked()</slot>
  </slots>
 </ui>
