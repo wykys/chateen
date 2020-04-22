@@ -79,42 +79,69 @@ class Ui_MainWindow(object):
         self.widget_right.setEnabled(True)
         self.verticalLayout_2 = QVBoxLayout(self.widget_right)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.groupBox = QGroupBox(self.widget_right)
-        self.groupBox.setObjectName(u"groupBox")
-        self.verticalLayout_5 = QVBoxLayout(self.groupBox)
+        self.group_who = QGroupBox(self.widget_right)
+        self.group_who.setObjectName(u"group_who")
+        self.verticalLayout_5 = QVBoxLayout(self.group_who)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.radio_button_all = QRadioButton(self.groupBox)
+        self.radio_button_all = QRadioButton(self.group_who)
         self.radio_button_all.setObjectName(u"radio_button_all")
         self.radio_button_all.setChecked(True)
 
         self.verticalLayout_5.addWidget(self.radio_button_all)
 
-        self.radio_button_one = QRadioButton(self.groupBox)
+        self.radio_button_one = QRadioButton(self.group_who)
         self.radio_button_one.setObjectName(u"radio_button_one")
         self.radio_button_one.setChecked(False)
 
         self.verticalLayout_5.addWidget(self.radio_button_one)
 
-        self.line_edit_participant = QLineEdit(self.groupBox)
+        self.line_edit_participant = QLineEdit(self.group_who)
         self.line_edit_participant.setObjectName(u"line_edit_participant")
         self.line_edit_participant.setEnabled(False)
 
         self.verticalLayout_5.addWidget(self.line_edit_participant)
 
 
-        self.verticalLayout_2.addWidget(self.groupBox)
+        self.verticalLayout_2.addWidget(self.group_who)
 
-        self.groupBox_2 = QGroupBox(self.widget_right)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.verticalLayout_6 = QVBoxLayout(self.groupBox_2)
+        self.group_date = QGroupBox(self.widget_right)
+        self.group_date.setObjectName(u"group_date")
+        self.verticalLayout_6 = QVBoxLayout(self.group_date)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.widget = QWidget(self.groupBox_2)
-        self.widget.setObjectName(u"widget")
-        self.horizontalLayout_3 = QHBoxLayout(self.widget)
+        self.widget_date_enable = QWidget(self.group_date)
+        self.widget_date_enable.setObjectName(u"widget_date_enable")
+        self.verticalLayout_9 = QVBoxLayout(self.widget_date_enable)
+        self.verticalLayout_9.setSpacing(6)
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.verticalLayout_9.setContentsMargins(0, 0, 0, 9)
+        self.radio_button_date_no = QRadioButton(self.widget_date_enable)
+        self.radio_button_date_no.setObjectName(u"radio_button_date_no")
+        self.radio_button_date_no.setChecked(True)
+
+        self.verticalLayout_9.addWidget(self.radio_button_date_no)
+
+        self.radio_button_date_yes = QRadioButton(self.widget_date_enable)
+        self.radio_button_date_yes.setObjectName(u"radio_button_date_yes")
+
+        self.verticalLayout_9.addWidget(self.radio_button_date_yes)
+
+
+        self.verticalLayout_6.addWidget(self.widget_date_enable)
+
+        self.widget_date_range = QWidget(self.group_date)
+        self.widget_date_range.setObjectName(u"widget_date_range")
+        self.widget_date_range.setEnabled(True)
+        self.widget_date_range.setVisible(False)
+        self.verticalLayout_8 = QVBoxLayout(self.widget_date_range)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.widget_date_from = QWidget(self.widget_date_range)
+        self.widget_date_from.setObjectName(u"widget_date_from")
+        self.horizontalLayout_3 = QHBoxLayout(self.widget_date_from)
         self.horizontalLayout_3.setSpacing(0)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.checkbox_from = QCheckBox(self.widget)
+        self.checkbox_from = QCheckBox(self.widget_date_from)
         self.checkbox_from.setObjectName(u"checkbox_from")
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -124,29 +151,29 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addWidget(self.checkbox_from)
 
-        self.date_from = QDateEdit(self.widget)
+        self.date_from = QDateEdit(self.widget_date_from)
         self.date_from.setObjectName(u"date_from")
         self.date_from.setEnabled(False)
 
         self.horizontalLayout_3.addWidget(self.date_from)
 
 
-        self.verticalLayout_6.addWidget(self.widget)
+        self.verticalLayout_8.addWidget(self.widget_date_from)
 
-        self.widget_2 = QWidget(self.groupBox_2)
-        self.widget_2.setObjectName(u"widget_2")
-        self.horizontalLayout_4 = QHBoxLayout(self.widget_2)
+        self.widget_date_to = QWidget(self.widget_date_range)
+        self.widget_date_to.setObjectName(u"widget_date_to")
+        self.horizontalLayout_4 = QHBoxLayout(self.widget_date_to)
         self.horizontalLayout_4.setSpacing(0)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.checkbox_to = QCheckBox(self.widget_2)
+        self.checkbox_to = QCheckBox(self.widget_date_to)
         self.checkbox_to.setObjectName(u"checkbox_to")
         sizePolicy.setHeightForWidth(self.checkbox_to.sizePolicy().hasHeightForWidth())
         self.checkbox_to.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_4.addWidget(self.checkbox_to)
 
-        self.date_to = QDateEdit(self.widget_2)
+        self.date_to = QDateEdit(self.widget_date_to)
         self.date_to.setObjectName(u"date_to")
         self.date_to.setEnabled(False)
         self.date_to.setWrapping(False)
@@ -155,27 +182,30 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.date_to)
 
 
-        self.verticalLayout_6.addWidget(self.widget_2)
+        self.verticalLayout_8.addWidget(self.widget_date_to)
 
 
-        self.verticalLayout_2.addWidget(self.groupBox_2)
+        self.verticalLayout_6.addWidget(self.widget_date_range)
+
+
+        self.verticalLayout_2.addWidget(self.group_date)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_2)
 
-        self.groupBox_3 = QGroupBox(self.widget_right)
-        self.groupBox_3.setObjectName(u"groupBox_3")
-        self.verticalLayout = QVBoxLayout(self.groupBox_3)
+        self.group_export = QGroupBox(self.widget_right)
+        self.group_export.setObjectName(u"group_export")
+        self.verticalLayout = QVBoxLayout(self.group_export)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.btn_export = QPushButton(self.groupBox_3)
+        self.btn_export = QPushButton(self.group_export)
         self.btn_export.setObjectName(u"btn_export")
         self.btn_export.setEnabled(False)
 
         self.verticalLayout.addWidget(self.btn_export)
 
 
-        self.verticalLayout_2.addWidget(self.groupBox_3)
+        self.verticalLayout_2.addWidget(self.group_export)
 
         self.splitter.addWidget(self.widget_right)
 
@@ -210,8 +240,10 @@ class Ui_MainWindow(object):
         self.open.triggered.connect(MainWindow.menu_file_open)
         self.checkbox_from.toggled.connect(self.date_from.setEnabled)
         self.checkbox_to.toggled.connect(self.date_to.setEnabled)
+        self.radio_button_date_no.clicked.connect(self.widget_date_range.hide)
+        self.radio_button_date_yes.clicked.connect(self.widget_date_range.show)
 
-        self.tabwidget.setCurrentIndex(0)
+        self.tabwidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -238,18 +270,20 @@ class Ui_MainWindow(object):
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_chats), QCoreApplication.translate("MainWindow", u"Chaty", None))
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_participants), QCoreApplication.translate("MainWindow", u"\u00da\u010dastn\u00edci", None))
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_more), QCoreApplication.translate("MainWindow", u"V\u00edce", None))
-        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Kdo poskytene data?", None))
+        self.group_who.setTitle(QCoreApplication.translate("MainWindow", u"Kdo poskytene data?", None))
         self.radio_button_all.setText(QCoreApplication.translate("MainWindow", u"V\u0161ichni \u00fa\u010dastn\u00edci", None))
         self.radio_button_one.setText(QCoreApplication.translate("MainWindow", u"J\u00e1", None))
 #if QT_CONFIG(tooltip)
         self.line_edit_participant.setToolTip(QCoreApplication.translate("MainWindow", u"\u00da\u010dastn\u00edku, zadejte sv\u00e9 jm\u00e9no.", None))
 #endif // QT_CONFIG(tooltip)
-        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"\u010casov\u011b omezit data?", None))
+        self.group_date.setTitle(QCoreApplication.translate("MainWindow", u"\u010casov\u011b omezit data?", None))
+        self.radio_button_date_no.setText(QCoreApplication.translate("MainWindow", u"Ne", None))
+        self.radio_button_date_yes.setText(QCoreApplication.translate("MainWindow", u"Ano", None))
         self.checkbox_from.setText(QCoreApplication.translate("MainWindow", u"Od", None))
         self.date_from.setDisplayFormat(QCoreApplication.translate("MainWindow", u"dd.MM.yyyy", None))
         self.checkbox_to.setText(QCoreApplication.translate("MainWindow", u"Do", None))
         self.date_to.setDisplayFormat(QCoreApplication.translate("MainWindow", u"dd.MM.yyyy", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"P\u0159isp\u011bte na olt\u00e1\u0159 v\u011bdy.", None))
+        self.group_export.setTitle(QCoreApplication.translate("MainWindow", u"P\u0159isp\u011bte na olt\u00e1\u0159 v\u011bdy.", None))
         self.btn_export.setText(QCoreApplication.translate("MainWindow", u"Exportovat", None))
         self.file.setTitle(QCoreApplication.translate("MainWindow", u"Soubor", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"N\u00e1pov\u011bda", None))

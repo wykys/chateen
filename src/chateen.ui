@@ -25,7 +25,7 @@
         <bool>true</bool>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="documentMode">
         <bool>false</bool>
@@ -73,7 +73,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="group_who">
           <property name="title">
            <string>Kdo poskytene data?</string>
           </property>
@@ -112,16 +112,16 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_2">
+         <widget class="QGroupBox" name="group_date">
           <property name="title">
            <string>Časově omezit data?</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QWidget" name="widget" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <widget class="QWidget" name="widget_date_enable" native="true">
+             <layout class="QVBoxLayout" name="verticalLayout_9">
               <property name="spacing">
-               <number>0</number>
+               <number>6</number>
               </property>
               <property name="leftMargin">
                <number>0</number>
@@ -133,28 +133,22 @@
                <number>0</number>
               </property>
               <property name="bottomMargin">
-               <number>0</number>
+               <number>9</number>
               </property>
               <item>
-               <widget class="QCheckBox" name="checkbox_from">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
+               <widget class="QRadioButton" name="radio_button_date_no">
                 <property name="text">
-                 <string>Od</string>
+                 <string>Ne</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QDateEdit" name="date_from">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="displayFormat">
-                 <string>dd.MM.yyyy</string>
+               <widget class="QRadioButton" name="radio_button_date_yes">
+                <property name="text">
+                 <string>Ano</string>
                 </property>
                </widget>
               </item>
@@ -162,11 +156,14 @@
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget_2" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_4">
-              <property name="spacing">
-               <number>0</number>
-              </property>
+            <widget class="QWidget" name="widget_date_range" native="true">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="visible">
+              <bool>false</bool>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_8">
               <property name="leftMargin">
                <number>0</number>
               </property>
@@ -180,32 +177,97 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="QCheckBox" name="checkbox_to">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Do</string>
-                </property>
+               <widget class="QWidget" name="widget_date_from" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QCheckBox" name="checkbox_from">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Od</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDateEdit" name="date_from">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="displayFormat">
+                    <string>dd.MM.yyyy</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
               <item>
-               <widget class="QDateEdit" name="date_to">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="wrapping">
-                 <bool>false</bool>
-                </property>
-                <property name="frame">
-                 <bool>true</bool>
-                </property>
-                <property name="displayFormat">
-                 <string>dd.MM.yyyy</string>
-                </property>
+               <widget class="QWidget" name="widget_date_to" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QCheckBox" name="checkbox_to">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Do</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDateEdit" name="date_to">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="wrapping">
+                    <bool>false</bool>
+                   </property>
+                   <property name="frame">
+                    <bool>true</bool>
+                   </property>
+                   <property name="displayFormat">
+                    <string>dd.MM.yyyy</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -228,7 +290,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_3">
+         <widget class="QGroupBox" name="group_export">
           <property name="title">
            <string>Přispěte na oltář vědy.</string>
           </property>
@@ -387,6 +449,38 @@
     <hint type="destinationlabel">
      <x>728</x>
      <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radio_button_date_no</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>widget_date_range</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>705</x>
+     <y>199</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>705</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radio_button_date_yes</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>widget_date_range</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>705</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>705</x>
+     <y>280</y>
     </hint>
    </hints>
   </connection>
