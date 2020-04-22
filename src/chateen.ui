@@ -278,8 +278,15 @@
     <addaction name="help"/>
     <addaction name="about"/>
    </widget>
+   <widget class="QMenu" name="tools">
+    <property name="title">
+     <string>Nástroje</string>
+    </property>
+    <addaction name="reduce"/>
+   </widget>
    <addaction name="file"/>
    <addaction name="menuHelp"/>
+   <addaction name="tools"/>
   </widget>
   <action name="open">
    <property name="text">
@@ -309,6 +316,11 @@
   <action name="about">
    <property name="text">
     <string>O projektu</string>
+   </property>
+  </action>
+  <action name="reduce">
+   <property name="text">
+    <string>Fejkař Otto</string>
    </property>
   </action>
  </widget>

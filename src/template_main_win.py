@@ -28,6 +28,8 @@ class Ui_MainWindow(object):
         self.help.setObjectName(u"help")
         self.about = QAction(MainWindow)
         self.about.setObjectName(u"about")
+        self.reduce = QAction(MainWindow)
+        self.reduce.setObjectName(u"reduce")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayout = QHBoxLayout(self.centralwidget)
@@ -191,13 +193,17 @@ class Ui_MainWindow(object):
         self.file.setToolTipsVisible(True)
         self.menuHelp = QMenu(self.menuBar)
         self.menuHelp.setObjectName(u"menuHelp")
+        self.tools = QMenu(self.menuBar)
+        self.tools.setObjectName(u"tools")
         MainWindow.setMenuBar(self.menuBar)
 
         self.menuBar.addAction(self.file.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
+        self.menuBar.addAction(self.tools.menuAction())
         self.file.addAction(self.open)
         self.menuHelp.addAction(self.help)
         self.menuHelp.addAction(self.about)
+        self.tools.addAction(self.reduce)
 
         self.retranslateUi(MainWindow)
         self.checkbox_from.clicked.connect(self.date_from.setEnabled)
@@ -228,6 +234,7 @@ class Ui_MainWindow(object):
         self.help.setShortcut(QCoreApplication.translate("MainWindow", u"F1", None))
 #endif // QT_CONFIG(shortcut)
         self.about.setText(QCoreApplication.translate("MainWindow", u"O projektu", None))
+        self.reduce.setText(QCoreApplication.translate("MainWindow", u"Fejka\u0159 Otto", None))
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_chats), QCoreApplication.translate("MainWindow", u"Chaty", None))
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_participants), QCoreApplication.translate("MainWindow", u"\u00da\u010dastn\u00edci", None))
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_more), QCoreApplication.translate("MainWindow", u"V\u00edce", None))
@@ -246,5 +253,6 @@ class Ui_MainWindow(object):
         self.btn_export.setText(QCoreApplication.translate("MainWindow", u"Exportovat", None))
         self.file.setTitle(QCoreApplication.translate("MainWindow", u"Soubor", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"N\u00e1pov\u011bda", None))
+        self.tools.setTitle(QCoreApplication.translate("MainWindow", u"N\u00e1stroje", None))
     # retranslateUi
 
