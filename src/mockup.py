@@ -14,8 +14,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle('Chateen')
 
+    def set_completer_name(self):
+        names = list([n.name for n in db.get_participants().all()])
+        completer = QtWidgets.QCompleter(names)
+        self.line_edit_participant.setCompleter(completer)
+
     def menu_file_open(self):
         self.update_table()
+        self.set_completer_name()
 
     def update_table(self):
         self.update_table_chats()
