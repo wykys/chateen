@@ -36,7 +36,7 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QTableWidget" name="table_widget_chats"/>
+          <widget class="QTableWidget" name="table_chats"/>
          </item>
         </layout>
        </widget>
@@ -46,7 +46,7 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QTableWidget" name="table_widget_participants"/>
+          <widget class="QTableWidget" name="table_participants"/>
          </item>
         </layout>
        </widget>
@@ -301,16 +301,16 @@
   <connection>
    <sender>checkbox_from</sender>
    <signal>clicked(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>showFullScreen()</slot>
+   <receiver>date_from</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>578</x>
      <y>201</y>
     </hint>
     <hint type="destinationlabel">
-     <x>441</x>
-     <y>271</y>
+     <x>728</x>
+     <y>201</y>
     </hint>
    </hints>
   </connection>
@@ -346,5 +346,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>open</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>menu_file_open()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>161</x>
+     <y>68</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>menu_file_open()</slot>
+ </slots>
 </ui>
