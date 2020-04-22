@@ -22,12 +22,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_table_chats()
         self.update_table_participants()
 
-    def table_chat_button_click(self, chat):
+    def click_table_chat_button(self, chat):
+        print('CHAT')
         self.update_table_chat_detail(chat)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
-    def table_participant_button_click(self, chat):
-        self.update_table_chat_detail(chat)
+    def click_table_participant_button(self, participant):
+        print('PARTICIPANT')
+        self.update_table_chat_detail(participant)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
     def update_table_chats(self):
@@ -64,7 +66,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             layout = QtWidgets.QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
             button = QtWidgets.QPushButton('...')
-            button.clicked.connect(lambda y=0, x=chat: self.table_chat_button_click(x))
+            button.clicked.connect(lambda y=0, x=chat: self.click_table_chat_button(x))
             layout.addWidget(button)
 
             item5 = QtWidgets.QWidget()
@@ -111,7 +113,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             layout = QtWidgets.QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
             button = QtWidgets.QPushButton('...')
-            button.clicked.connect(lambda y=0, x=participant: self.table_participant_button_click(x))
+            button.clicked.connect(lambda y=0, x=participant: self.click_table_participant_button(x))
             layout.addWidget(button)
 
             item4 = QtWidgets.QWidget()
@@ -160,7 +162,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             layout = QtWidgets.QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
             button = QtWidgets.QPushButton('...')
-            button.clicked.connect(lambda y=0, x=message.participant: self.table_participant_button_click(x))
+            button.clicked.connect(lambda y=0, x=message.participant: self.click_table_participant_button(x))
             layout.addWidget(button)
 
             item4 = QtWidgets.QWidget()
