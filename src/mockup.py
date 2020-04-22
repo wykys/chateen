@@ -81,7 +81,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_participants.setColumnCount(4)
         self.table_participants.clearContents()
         self.table_participants.setRowCount(0)
-        self.table_chats.setSortingEnabled(True)
+        self.table_participants.setSortingEnabled(True)
 
         self.table_participants.setHorizontalHeaderLabels(
             ['Jméno', 'Počet zpráv', 'Počet chatů', 'Více']
