@@ -64,12 +64,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_table_participant_detail(None)
 
     def click_table_chat_button(self, chat):
-        print('CHAT')
         self.update_table_chat_detail(chat)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
     def click_table_participant_button(self, participant):
-        print('PARTICIPANT')
         self.update_table_participant_detail(participant)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
