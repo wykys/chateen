@@ -41,14 +41,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             item1.setFlags(item1.flags() | QtCore.Qt.ItemIsUserCheckable)
             item1.setCheckState(QtCore.Qt.Unchecked)
             item1.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            item1.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
             item2 = QtWidgets.QTableWidgetItem(str(chat.get_cnt_messages()))
             item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+            item2.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
             item3 = QtWidgets.QTableWidgetItem(str(chat.get_cnt_participants()))
             item3.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+            item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
             item4 = QtWidgets.QTableWidgetItem(str(chat.participants)[1:-1])
+            item4.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
             layout = QtWidgets.QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
@@ -87,12 +91,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             item1 = QtWidgets.QTableWidgetItem(str(participant.name))
             item1.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            item1.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
             item2 = QtWidgets.QTableWidgetItem(str(participant.get_cnt_messages()))
             item2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+            item2.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
             item3 = QtWidgets.QTableWidgetItem(str(participant.get_cnt_chats()))
             item3.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+            item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
             layout = QtWidgets.QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
