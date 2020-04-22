@@ -73,9 +73,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tabwidget.setCurrentWidget(self.tab_more)
 
     def update_table_chats(self):
+        self.table_chats.blockSignals(True)
         chats = db.get_chats()
         if not chats is None:
             tables.update_table_chats(self, chats)
+        self.table_chats.blockSignals(False)
 
     def update_table_participants(self):
         participants = db.get_participants()
@@ -90,9 +92,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if not participant is None:
             tables.update_table_participant_detail(self, participant)
 
-    def callback_table_itam_changed(self, row, column):
+    def callback_table_chats_cell_changed(self, row, column, toggle=False):
         item = self.table_chats.item(row, column)
+        if toggle:
+            if bool(item.checkState()):
+                item.setCheckState(QtCore.Qt.Unchecked)
+            else:
+                item.setCheckState(QtCore.Qt.Checked)
         tables.checkbox_decorator(item)
+
+    def callback_table_chats_cell_clicked(self, row, column):
+        self.callback_table_chats_cell_changed(row, 0, toggle=True)
+
 
 
 if __name__ == '__main__':

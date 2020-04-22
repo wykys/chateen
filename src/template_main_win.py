@@ -261,6 +261,8 @@ class Ui_MainWindow(object):
         self.menu_file_open_ig.triggered.connect(MainWindow.action_menu_file_open_ig)
         self.menu_tools_clean.triggered.connect(MainWindow.action_menu_tools_clean)
         self.menu_tools_reduce.triggered.connect(MainWindow.action_menu_tools_reduce)
+        self.table_chats.cellChanged.connect(MainWindow.callback_table_chats_cell_changed)
+        self.table_chats.cellClicked.connect(MainWindow.callback_table_chats_cell_clicked)
 
         self.tabwidget.setCurrentIndex(0)
 

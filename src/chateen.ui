@@ -611,6 +611,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>table_chats</sender>
+   <signal>cellChanged(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_table_chats_cell_changed(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>table_chats</sender>
+   <signal>cellClicked(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_table_chats_cell_clicked(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>action_menu_file_open()</slot>
@@ -618,5 +650,7 @@
   <slot>action_menu_file_open_ig()</slot>
   <slot>action_menu_tools_clean()</slot>
   <slot>action_menu_tools_reduce()</slot>
+  <slot>callback_table_chats_cell_changed(int,int)</slot>
+  <slot>callback_table_chats_cell_clicked(int,int)</slot>
  </slots>
 </ui>

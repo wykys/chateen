@@ -94,10 +94,8 @@ def update_table_chats(self, chats):
         item5 = create_table_button(self.table_chats, self.callback_click_table_chat_button, chat)
         self.table_chats.setCellWidget(r, 4, item5)
 
-
     set_columns_width(self.table_chats, 5)
 
-    self.table_chats.cellChanged.connect(self.callback_table_itam_changed)
 
 
 def update_table_participants(self, participants):

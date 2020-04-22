@@ -59,6 +59,8 @@ class DbReduce(object):
 
         if len(inactive) > 1:
             fake_chat = inactive[0]
+        else:
+            return
 
         for chat in inactive:
             if chat.id == fake_chat.id:
