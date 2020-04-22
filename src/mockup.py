@@ -13,7 +13,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle('Chateen')
-        self.update_table()
 
     def menu_file_open(self):
         self.update_table()
@@ -21,6 +20,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def update_table(self):
         self.update_table_chats()
         self.update_table_participants()
+        self.update_table_participant_detail(db.get_participants().first())
 
     def click_table_chat_button(self, chat):
         print('CHAT')
@@ -29,7 +29,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def click_table_participant_button(self, participant):
         print('PARTICIPANT')
-        self.update_table_chat_detail(participant)
+        self.update_table_participant_detail(participant)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
     def update_table_chats(self):
@@ -38,7 +38,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_chats.clearContents()
         self.table_chats.setRowCount(0)
         self.table_chats.setSortingEnabled(True)
-        self.update_table_participant_detail(db.get_participants().first())
 
         self.table_chats.setHorizontalHeaderLabels(
             ['Zpracovat', 'Počet zpráv', 'Počet účastníků', 'Účastníci', 'Více']
@@ -63,9 +62,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             item4 = QtWidgets.QTableWidgetItem(str(chat.participants)[1:-1])
             item4.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
-            layout = QtWidgets.QHBoxLayout()
+            layout = QtWidgets.QHBoxLayout(self.table_chats)
             layout.setContentsMargins(0, 0, 0, 0)
-            button = QtWidgets.QPushButton('...')
+            button = QtWidgets.QPushButton(self.table_chats)
+            button.setText('?')
             button.clicked.connect(lambda y=0, x=chat: self.click_table_chat_button(x))
             layout.addWidget(button)
 
@@ -110,9 +110,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             item3.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
             item3.setFlags(item1.flags() & ~QtCore.Qt.ItemIsEditable)
 
-            layout = QtWidgets.QHBoxLayout()
+            layout = QtWidgets.QHBoxLayout(self.table_participants)
             layout.setContentsMargins(0, 0, 0, 0)
-            button = QtWidgets.QPushButton('...')
+            button = QtWidgets.QPushButton(self.table_participants)
+            button.setText('?')
             button.clicked.connect(lambda y=0, x=participant: self.click_table_participant_button(x))
             layout.addWidget(button)
 
@@ -159,9 +160,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for c, item in enumerate([item1, item2, item3]):
                 self.table_more.setItem(r, c, item)
 
-            layout = QtWidgets.QHBoxLayout()
+            layout = QtWidgets.QHBoxLayout(self.table_more)
             layout.setContentsMargins(0, 0, 0, 0)
-            button = QtWidgets.QPushButton('...')
+            button = QtWidgets.QPushButton(self.table_more)
+            button.setText('?')
             button.clicked.connect(lambda y=0, x=message.participant: self.click_table_participant_button(x))
             layout.addWidget(button)
 
