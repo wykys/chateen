@@ -28,10 +28,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_table()
         self.set_completer_name()
 
-    def action_menu_file_open(self):
+    def callback_menu_file_open(self):
         self.load_new_data()
 
-    def action_menu_file_open_fb(self):
+    def callback_menu_file_open_fb(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
             filter='Facebook JSON (*.json *.JSON)',
@@ -41,7 +41,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         FbLoader(path)
         self.load_new_data()
 
-    def action_menu_file_open_ig(self):
+    def callback_menu_file_open_ig(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
             filter='Instagram JSON (*.json *.JSON)',
@@ -51,11 +51,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         IgLoader(path)
         self.load_new_data()
 
-    def action_menu_tools_reduce(self):
+    def callback_menu_tools_reduce(self):
         db.reduce()
         self.load_new_data()
 
-    def action_menu_tools_clean(self):
+    def callback_menu_tools_clean(self):
         db.delete_all()
         self.load_new_data()
 

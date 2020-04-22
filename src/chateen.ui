@@ -471,7 +471,7 @@
    <sender>menu_file_open</sender>
    <signal>triggered(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>action_menu_file_open()</slot>
+   <slot>callback_menu_file_open()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -551,7 +551,7 @@
    <sender>menu_file_open_fb</sender>
    <signal>triggered(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>action_menu_file_open_fb()</slot>
+   <slot>callback_menu_file_open_fb()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -567,7 +567,7 @@
    <sender>menu_file_open_ig</sender>
    <signal>triggered(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>action_menu_file_open_ig()</slot>
+   <slot>callback_menu_file_open_ig()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -583,7 +583,7 @@
    <sender>menu_tools_clean</sender>
    <signal>triggered(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>action_menu_tools_clean()</slot>
+   <slot>callback_menu_tools_clean()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -599,7 +599,7 @@
    <sender>menu_tools_reduce</sender>
    <signal>triggered(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>action_menu_tools_reduce()</slot>
+   <slot>callback_menu_tools_reduce()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -645,11 +645,11 @@
   </connection>
  </connections>
  <slots>
-  <slot>action_menu_file_open()</slot>
-  <slot>action_menu_file_open_fb()</slot>
-  <slot>action_menu_file_open_ig()</slot>
-  <slot>action_menu_tools_clean()</slot>
-  <slot>action_menu_tools_reduce()</slot>
+  <slot>callback_menu_file_open()</slot>
+  <slot>callback_menu_file_open_fb()</slot>
+  <slot>callback_menu_file_open_ig()</slot>
+  <slot>callback_menu_tools_clean()</slot>
+  <slot>callback_menu_tools_reduce()</slot>
   <slot>callback_table_chats_cell_changed(int,int)</slot>
   <slot>callback_table_chats_cell_clicked(int,int)</slot>
  </slots>
