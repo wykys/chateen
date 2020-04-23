@@ -17,50 +17,45 @@ class IgLoader(LoaderPrototype):
             self.data = json.load(fr)
 
     def decode(self):
+        participants_dict = dict()
+        for p in db.get_participants():
+            participants_dict[p.name] = p
 
         for data in self.data:
             if 'participants' in data and 'conversation' in data:
                 chat = db.new_chat()
-                db.add(chat)
-                db.commit()
+                chat.selected = False
 
                 for name in data['participants']:
-                    participant = db.get_participant(name)
-                    if name == '__karin_kaa_':
-                        print('TUUU v participants')
-                        print(participant)
-
-                    if participant is None:
+                    if not name in participants_dict:
                         participant = db.new_participant()
                         participant.name = name
-                        participant.chats.append(chat)
                         chat.participants.append(participant)
-                        db.add(participant)
-                        db.commit()
+                        participants_dict[name] = participant
                     else:
-                        participant.chats.append(chat)
-                        chat.participants.append(participant)
-                        db.commit()
+                        chat.participants.append(participants_dict[name])
 
                 for message in data['conversation']:
                     if 'text' in message and 'sender' in message:
-                        participant = db.get_participant(message['sender'])
+                        name = message['sender']
                         # blocked user
-                        if participant is None:
+                        if not name in participants_dict:
                             participant = db.new_participant()
-                            participant.name = message['sender']
-                            participant.chats.append(chat)
+                            participant.name = name
                             chat.participants.append(participant)
-                            db.add(participant)
-                            db.commit()
+                            participants_dict[name] = participant
 
                         msg = db.new_message()
-                        msg.chat = chat
-                        msg.participant = participant
+                        msg.participant = participants_dict[name]
                         msg.text = message['text']
                         msg.datetime = datetime.fromisoformat(message['created_at'])
-                        db.add(msg)
-                        db.commit()
+                        chat.messages.append(msg)
+
+                db.add(chat)
+
+            for name, participant in participants_dict.items():
+                db.add(participant)
+            db.commit()
 
 
 if __name__ == '__main__':

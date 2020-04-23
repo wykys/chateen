@@ -21,11 +21,11 @@ class Message(BaseModel):
     text = Column(Unicode)
     datetime = Column(DateTime)
 
-    chat = relationship('Chat')
-    participant = relationship('Participant')
-
     chat_id = Column(Integer, ForeignKey('chat.id'))
+    chat = relationship('Chat')
+
     participant_id = Column(Integer, ForeignKey('participant.id'))
+    participant = relationship('Participant')
 
     def __repr__(self):
         return f'Message: {self.text}'
@@ -63,9 +63,9 @@ class Chat(BaseModel):
 
 class Link(BaseModel):
     chat_id = Column(Integer, ForeignKey('chat.id'))
-    participant_id = Column(Integer, ForeignKey('participant.id'))
-
     chat = relationship(Chat, backref=backref('link', cascade='all, delete-orphan'))
+
+    participant_id = Column(Integer, ForeignKey('participant.id'))
     participant = relationship(Participant, backref=backref('link', cascade='all, delete-orphan'))
 
     __mapper_args__ = {

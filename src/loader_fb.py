@@ -35,29 +35,41 @@ class FbLoader(LoaderPrototype):
 
     def decode(self):
         chat = db.new_chat()
-        db.add(chat)
-        db.commit()
+        chat.selected = False
+
+        participants_dict = dict()
+        for p in db.get_participants():
+            participants_dict[p.name] = p
 
         for p in self.data['participants']:
             if 'name' in p:
-                participant = db.new_participant()
-                participant.name = p['name']
-                participant.chats.append(chat)
-                chat.participants.append(participant)
-                db.add(participant)
-                db.commit()
+                name = p['name']
+                if not name in participants_dict:
+                    participant = db.new_participant()
+                    participant.name = name
+                    chat.participants.append(participant)
+                    participants_dict[name] = participant
 
         for message in self.data['messages']:
             if 'content' in message and 'sender_name' in message and 'timestamp_ms' in message:
-                participant = db.get_participant(message['sender_name'])
+
+                # blocked user
+                if not name in participants_dict:
+                    participant = db.new_participant()
+                    participant.name = name
+                    chat.participants.append(participant)
+                    participants_dict[name] = participant
+
                 msg = db.new_message()
-                msg.chat = chat
-                msg.participant = participant
+                msg.participant = participants_dict[name]
                 msg.text = message['content']
-                time_stamp = int(message['timestamp_ms']) / 1000
-                msg.datetime = datetime.fromtimestamp(time_stamp)
-                db.add(msg)
-                db.commit()
+                msg.datetime = datetime.fromtimestamp(int(message['timestamp_ms']) / 1000)
+                chat.messages.append(msg)
+
+        db.add(chat)
+        for name, participant in participants_dict.items():
+            db.add(participant)
+        db.commit()
 
 
 if __name__ == '__main__':

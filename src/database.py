@@ -9,13 +9,13 @@ from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, backref
 
 from database_models import BaseModel, Chat, Participant, Message, Link
-from database_reduce import DbReduce
+#from database_reduce import DbReduce
 
 
 class Db(object):
     def __init__(self):
-        #engine = create_engine(f'sqlite:///:memory:', echo=False)
-        engine = create_engine(f'sqlite:///test.db', echo=True)
+        engine = create_engine(f'sqlite:///:memory:', echo=False)
+        #engine = create_engine(f'sqlite:///test.db', echo=False)
         _session = sessionmaker(bind=engine)
         self.session = _session()
         BaseModel.metadata.create_all(engine)
@@ -24,6 +24,11 @@ class Db(object):
         self.add = self.session.add
         self.commit = self.session.commit
         self.delete = self.session.delete
+
+        self.new_chat = Chat
+        self.new_link = Link
+        self.new_message = Message
+        self.new_participant = Participant
 
     def get_chats(self):
         return self.query(Chat)
@@ -37,41 +42,12 @@ class Db(object):
     def get_participant(self, name: str):
         return self.query(Participant).filter_by(name=name).first()
 
-    def new_chat(self):
-        return Chat()
-
-    def new_participant(self):
-        return Participant()
-
-    def new_message(self):
-        return Message()
-
     def delete_all(self):
         self.__init__()
 
     def reduce(self):
-        DbReduce(self)
+        pass
+        # DbReduce(self)
 
 
 db = Db()
-
-if __name__ == '__main__':
-    participant = Participant(name='Karel Vočko')
-    chat = Chat()
-    message = Message(participant=participant, chat=chat, text='Ahoj světe')
-
-    participant.chats.append(chat)
-    chat.participants.append(participant)
-
-    db.add(chat)
-    db.add(participant)
-    db.add(message)
-
-    db.commit()
-
-    query = db.query(Participant).first()
-    print(query.chats)
-
-    print(db.get_participant('Petr'))
-
-    print(db.query(Chat).first().participants)
