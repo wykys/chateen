@@ -97,37 +97,41 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         name = self.line_edit_participant.text()
         who = self.radio_button_who_one.isChecked()
-        format_is_chat_split = self.checkbox_export_format.isChecked()
+        format_is_chat_split = self.checkbox_export_format.isChecked() and self.checkbox_export_format.isEnabled()
 
-        if format_is_chat_split:
-            export = db.get_chats().filter(db.Chat.selected == True).join(db.Message).join(db.Participant)
-        else:
-            export = db.get_participants().join(db.Message).join(db.Chat).filter(db.Chat.selected == True)
+        export_msg = db.get_messages().join(db.Chat).filter(db.Chat.selected == True).join(db.Participant)
 
         if self.date_from.isEnabled():
-            export = export.filter(db.Message.datetime > date_from)
+            export_msg = export_msg.filter(db.Message.datetime > date_from)
 
         if self.date_to.isEnabled():
-            export = export.filter(db.Message.datetime < date_to)
+            export_msg = export_msg.filter(db.Message.datetime < date_to)
 
         if who:
             name = self.line_edit_participant.text()
-            export = export.filter(db.Participant.name == name)
+            export_msg = export_msg.filter(db.Participant.name == name)
 
-        # ! zprávy jsou nefiltrované !!!!
-        for exp in export.all():
-            name = exp.name
-            print(name, type(name))
+        if format_is_chat_split:
+            owner_list = [id.chat for id in export_msg.group_by(db.Chat)]
+        else:
+            owner_list = [id.participant for id in export_msg.group_by(db.Participant)]
+
+        for owner in owner_list:
+            if format_is_chat_split:
+                messages = export_msg.filter(db.Message.chat == owner)
+            else:
+                messages = export_msg.filter(db.Message.participant == owner)
+
+            name = owner.name
             if name is None:
-                name = f'chat_{exp.id:09}'
+                name = f'chat_{owner.id:09}'
             path = f'../out/{name}.txt'
+            print(name)
+
             with open(path, 'w') as fw:
-                fw.writelines([f'<s>{msg.text}</s>\n' for msg in exp.messages])
+                fw.writelines([f'<s>{msg.text}</s>\n' for msg in messages])
 
         print_time('Export End')
-
-    def callback_menu_file_open(self):
-        self.load_new_data()
 
     def callback_menu_file_open_fb(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(

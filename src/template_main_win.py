@@ -266,7 +266,6 @@ class Ui_MainWindow(object):
         self.menuBar.addAction(self.file.menuAction())
         self.menuBar.addAction(self.tools.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
-        self.file.addAction(self.menu_file_open)
         self.file.addAction(self.menu_file_open_fb)
         self.file.addAction(self.menu_file_open_ig)
         self.menuHelp.addAction(self.menu_help)
@@ -276,7 +275,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.radio_button_who_one.toggled.connect(self.line_edit_participant.setEnabled)
-        self.menu_file_open.triggered.connect(MainWindow.callback_menu_file_open)
         self.checkbox_from.toggled.connect(self.date_from.setEnabled)
         self.checkbox_to.toggled.connect(self.date_to.setEnabled)
         self.radio_button_date_no.clicked.connect(self.widget_date_range.hide)

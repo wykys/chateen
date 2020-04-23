@@ -2,25 +2,29 @@
 # wykys 2020
 # databáze konverzací pro generování korpusu
 
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, select, text, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, backref
 
 from database_models import BaseModel, Chat, Participant, Message, Link
-#from database_reduce import DbReduce
+from database_reduce import DbReduce
 
 
 class Db(object):
     def __init__(self):
         #engine = create_engine(f'sqlite:///:memory:', echo=False)
-        self.engine = create_engine(f'sqlite:///test.db', echo=False)
-        _session = sessionmaker(bind=self.engine)
+        engine = create_engine(f'sqlite:///test.db', echo=False)
+        _session = sessionmaker(bind=engine)
         self.session = _session()
-        BaseModel.metadata.create_all(self.engine)
+        BaseModel.metadata.create_all(engine)
 
+        self.conn = engine.connect()
+        self.execute = self.conn.execute
+        self.text = text
         self.select = select
+        self.func = func
 
         self.query = self.session.query
         self.add = self.session.add
@@ -41,11 +45,16 @@ class Db(object):
     def get_messages(self):
         return self.query(Message)
 
-    def get_participant(self, name: str):
-        return self.query(Participant).filter_by(name=name).first()
+    def get_count(self):
+        self.query()
 
     def delete_all(self):
         self.__init__()
+
+    def sql(self, cmd):
+        return self.execute(text(
+            cmd
+        )).fetchall()
 
     def reduce(self):
         DbReduce(self)

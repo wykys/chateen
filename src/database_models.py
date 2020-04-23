@@ -2,7 +2,7 @@
 # wykys 2020
 # ORL model databáze pro generování korpusu
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime, Boolean
@@ -37,6 +37,7 @@ class Participant(BaseModel):
     chats = relationship('Chat', secondary='link')
 
     def get_cnt_chats(self):
+
         return len(self.chats)
 
     def get_cnt_messages(self):
