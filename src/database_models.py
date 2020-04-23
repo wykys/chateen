@@ -5,7 +5,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
-from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship, backref
 
 
@@ -47,6 +47,7 @@ class Participant(BaseModel):
 
 
 class Chat(BaseModel):
+    selected = Column(Boolean)
     messages = relationship(Message, backref='chat_messege')
     participants = relationship(Participant, secondary='link')
 

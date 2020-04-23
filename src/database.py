@@ -15,13 +15,15 @@ from database_reduce import DbReduce
 class Db(object):
     def __init__(self):
         #engine = create_engine(f'sqlite:///:memory:', echo=False)
-        engine = create_engine(f'sqlite:///test.db', echo=False)
+        engine = create_engine(f'sqlite:///test.db', echo=True)
         _session = sessionmaker(bind=engine)
         self.session = _session()
         BaseModel.metadata.create_all(engine)
 
-    def query(self, param):
-        return self.session.query(param)
+        self.query = self.session.query
+        self.add = self.session.add
+        self.commit = self.session.commit
+        self.delete = self.session.delete
 
     def get_chats(self):
         return self.query(Chat)
@@ -43,16 +45,6 @@ class Db(object):
 
     def new_message(self):
         return Message()
-
-    def add(self, item):
-        self.session.add(item)
-
-    def commit(self):
-        self.session.flush()
-        self.session.commit()
-
-    def delete(self, item):
-        self.session.delete(item)
 
     def delete_all(self):
         self.__init__()

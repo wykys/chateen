@@ -95,17 +95,17 @@ class Ui_MainWindow(object):
         self.group_who.setObjectName(u"group_who")
         self.verticalLayout_5 = QVBoxLayout(self.group_who)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.radio_button_all = QRadioButton(self.group_who)
-        self.radio_button_all.setObjectName(u"radio_button_all")
-        self.radio_button_all.setChecked(True)
+        self.radio_button_who_all = QRadioButton(self.group_who)
+        self.radio_button_who_all.setObjectName(u"radio_button_who_all")
+        self.radio_button_who_all.setChecked(True)
 
-        self.verticalLayout_5.addWidget(self.radio_button_all)
+        self.verticalLayout_5.addWidget(self.radio_button_who_all)
 
-        self.radio_button_one = QRadioButton(self.group_who)
-        self.radio_button_one.setObjectName(u"radio_button_one")
-        self.radio_button_one.setChecked(False)
+        self.radio_button_who_one = QRadioButton(self.group_who)
+        self.radio_button_who_one.setObjectName(u"radio_button_who_one")
+        self.radio_button_who_one.setChecked(False)
 
-        self.verticalLayout_5.addWidget(self.radio_button_one)
+        self.verticalLayout_5.addWidget(self.radio_button_who_one)
 
         self.line_edit_participant = QLineEdit(self.group_who)
         self.line_edit_participant.setObjectName(u"line_edit_participant")
@@ -268,7 +268,7 @@ class Ui_MainWindow(object):
         self.tools.addAction(self.menu_tools_clean)
 
         self.retranslateUi(MainWindow)
-        self.radio_button_one.toggled.connect(self.line_edit_participant.setEnabled)
+        self.radio_button_who_one.toggled.connect(self.line_edit_participant.setEnabled)
         self.menu_file_open.triggered.connect(MainWindow.callback_menu_file_open)
         self.checkbox_from.toggled.connect(self.date_from.setEnabled)
         self.checkbox_to.toggled.connect(self.date_to.setEnabled)
@@ -281,6 +281,10 @@ class Ui_MainWindow(object):
         self.table_chats.cellClicked.connect(MainWindow.callback_table_chats_cell_clicked)
         self.btn_select_all.clicked.connect(MainWindow.callback_btn_select_all_clicked)
         self.btn_deselect_all.clicked.connect(MainWindow.callback_btn_deselect_all_clicked)
+        self.btn_export.clicked.connect(MainWindow.callback_btn_export)
+        self.radio_button_who_one.toggled.connect(MainWindow.callback_check_export_is_ready)
+        self.radio_button_date_yes.toggled.connect(MainWindow.callback_check_export_is_ready)
+        self.line_edit_participant.textChanged.connect(MainWindow.callback_check_export_is_ready)
 
         self.tabwidget.setCurrentIndex(0)
 
@@ -313,8 +317,8 @@ class Ui_MainWindow(object):
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_participants), QCoreApplication.translate("MainWindow", u"\u00da\u010dastn\u00edci", None))
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.tab_more), QCoreApplication.translate("MainWindow", u"V\u00edce", None))
         self.group_who.setTitle(QCoreApplication.translate("MainWindow", u"Kdo poskytene data?", None))
-        self.radio_button_all.setText(QCoreApplication.translate("MainWindow", u"V\u0161ichni \u00fa\u010dastn\u00edci", None))
-        self.radio_button_one.setText(QCoreApplication.translate("MainWindow", u"J\u00e1", None))
+        self.radio_button_who_all.setText(QCoreApplication.translate("MainWindow", u"V\u0161ichni \u00fa\u010dastn\u00edci", None))
+        self.radio_button_who_one.setText(QCoreApplication.translate("MainWindow", u"J\u00e1", None))
 #if QT_CONFIG(tooltip)
         self.line_edit_participant.setToolTip(QCoreApplication.translate("MainWindow", u"\u00da\u010dastn\u00edku, zadejte sv\u00e9 jm\u00e9no.", None))
 #endif // QT_CONFIG(tooltip)

@@ -124,7 +124,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <widget class="QRadioButton" name="radio_button_all">
+            <widget class="QRadioButton" name="radio_button_who_all">
              <property name="text">
               <string>Všichni účastníci</string>
              </property>
@@ -134,7 +134,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radio_button_one">
+            <widget class="QRadioButton" name="radio_button_who_one">
              <property name="text">
               <string>Já</string>
              </property>
@@ -475,7 +475,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>radio_button_one</sender>
+   <sender>radio_button_who_one</sender>
    <signal>toggled(bool)</signal>
    <receiver>line_edit_participant</receiver>
    <slot>setEnabled(bool)</slot>
@@ -682,6 +682,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btn_export</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_btn_export()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>478</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radio_button_who_one</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>102</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radio_button_date_yes</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>line_edit_participant</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>callback_menu_file_open()</slot>
@@ -693,5 +757,7 @@
   <slot>callback_table_chats_cell_clicked(int,int)</slot>
   <slot>callback_btn_select_all_clicked()</slot>
   <slot>callback_btn_deselect_all_clicked()</slot>
+  <slot>callback_btn_export()</slot>
+  <slot>callback_check_export_is_ready()</slot>
  </slots>
 </ui>
