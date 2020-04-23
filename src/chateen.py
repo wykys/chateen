@@ -114,8 +114,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             name = self.line_edit_participant.text()
             export = export.filter(db.Participant.name == name)
 
+        # ! zprávy jsou nefiltrované !!!!
         for exp in export.all():
-            path = f'../out/{exp.name}.txt'
+            name = exp.name
+            print(name, type(name))
+            if name is None:
+                name = f'chat_{exp.id:09}'
+            path = f'../out/{name}.txt'
             with open(path, 'w') as fw:
                 fw.writelines([f'<s>{msg.text}</s>\n' for msg in exp.messages])
 

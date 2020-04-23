@@ -47,6 +47,7 @@ class Participant(BaseModel):
 
 
 class Chat(BaseModel):
+    name = Column(Unicode)
     selected = Column(Boolean)
     messages = relationship(Message, backref='chat_messege')
     participants = relationship(Participant, secondary='link')
