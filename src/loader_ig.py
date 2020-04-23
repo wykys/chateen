@@ -23,12 +23,12 @@ class IgLoader(LoaderPrototype):
 
         for data in self.data:
             if 'participants' in data and 'conversation' in data:
-                chat = db.new_chat()
+                chat = db.Chat()
                 chat.selected = False
 
                 for name in data['participants']:
                     if not name in participants_dict:
-                        participant = db.new_participant()
+                        participant = db.Participant()
                         participant.name = name
                         chat.participants.append(participant)
                         participants_dict[name] = participant
@@ -40,12 +40,12 @@ class IgLoader(LoaderPrototype):
                         name = message['sender']
                         # blocked user
                         if not name in participants_dict:
-                            participant = db.new_participant()
+                            participant = db.Participant()
                             participant.name = name
                             chat.participants.append(participant)
                             participants_dict[name] = participant
 
-                        msg = db.new_message()
+                        msg = db.Message()
                         msg.participant = participants_dict[name]
                         msg.text = message['text']
                         msg.datetime = datetime.fromisoformat(message['created_at'])

@@ -20,7 +20,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(883, 544)
+        MainWindow.resize(858, 544)
         self.menu_file_open = QAction(MainWindow)
         self.menu_file_open.setObjectName(u"menu_file_open")
         self.menu_file_open.setShortcutContext(Qt.WidgetShortcut)
@@ -89,6 +89,8 @@ class Ui_MainWindow(object):
         self.widget_right = QWidget(self.splitter)
         self.widget_right.setObjectName(u"widget_right")
         self.widget_right.setEnabled(True)
+        self.widget_right.setMaximumSize(QSize(300, 16777215))
+        self.widget_right.setBaseSize(QSize(0, 0))
         self.verticalLayout_2 = QVBoxLayout(self.widget_right)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.group_who = QGroupBox(self.widget_right)
@@ -227,6 +229,11 @@ class Ui_MainWindow(object):
         self.group_export.setObjectName(u"group_export")
         self.verticalLayout = QVBoxLayout(self.group_export)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.checkbox_export_format = QCheckBox(self.group_export)
+        self.checkbox_export_format.setObjectName(u"checkbox_export_format")
+
+        self.verticalLayout.addWidget(self.checkbox_export_format)
+
         self.btn_export = QPushButton(self.group_export)
         self.btn_export.setObjectName(u"btn_export")
         self.btn_export.setEnabled(False)
@@ -246,7 +253,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.menuBar = QMenuBar(MainWindow)
         self.menuBar.setObjectName(u"menuBar")
-        self.menuBar.setGeometry(QRect(0, 0, 883, 22))
+        self.menuBar.setGeometry(QRect(0, 0, 858, 22))
         self.file = QMenu(self.menuBar)
         self.file.setObjectName(u"file")
         self.file.setToolTipsVisible(True)
@@ -285,6 +292,11 @@ class Ui_MainWindow(object):
         self.radio_button_who_one.toggled.connect(MainWindow.callback_check_export_is_ready)
         self.radio_button_date_yes.toggled.connect(MainWindow.callback_check_export_is_ready)
         self.line_edit_participant.textChanged.connect(MainWindow.callback_check_export_is_ready)
+        self.date_from.dateChanged.connect(MainWindow.callback_check_export_is_ready)
+        self.date_to.dateChanged.connect(MainWindow.callback_check_export_is_ready)
+        self.checkbox_from.toggled.connect(MainWindow.callback_check_export_is_ready)
+        self.checkbox_to.toggled.connect(MainWindow.callback_check_export_is_ready)
+        self.radio_button_who_all.toggled.connect(self.checkbox_export_format.setEnabled)
 
         self.tabwidget.setCurrentIndex(0)
 
@@ -333,6 +345,7 @@ class Ui_MainWindow(object):
         self.btn_select_all.setText(QCoreApplication.translate("MainWindow", u"Onzna\u010dit v\u0161e", None))
         self.btn_deselect_all.setText(QCoreApplication.translate("MainWindow", u"Odzna\u010dit v\u0161e", None))
         self.group_export.setTitle(QCoreApplication.translate("MainWindow", u"P\u0159isp\u011bte na olt\u00e1\u0159 v\u011bdy.", None))
+        self.checkbox_export_format.setText(QCoreApplication.translate("MainWindow", u"Rozd\u011blit na chaty", None))
         self.btn_export.setText(QCoreApplication.translate("MainWindow", u"Exportovat", None))
         self.file.setTitle(QCoreApplication.translate("MainWindow", u"Soubor", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"N\u00e1pov\u011bda", None))

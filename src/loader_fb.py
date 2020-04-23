@@ -34,7 +34,7 @@ class FbLoader(LoaderPrototype):
             self.data = json.load(fr, object_hook=fix_fb_code)
 
     def decode(self):
-        chat = db.new_chat()
+        chat = db.Chat()
         chat.selected = False
 
         participants_dict = dict()
@@ -45,7 +45,7 @@ class FbLoader(LoaderPrototype):
             if 'name' in p:
                 name = p['name']
                 if not name in participants_dict:
-                    participant = db.new_participant()
+                    participant = db.Participant()
                     participant.name = name
                     chat.participants.append(participant)
                     participants_dict[name] = participant
@@ -55,12 +55,12 @@ class FbLoader(LoaderPrototype):
 
                 # blocked user
                 if not name in participants_dict:
-                    participant = db.new_participant()
+                    participant = db.Participant()
                     participant.name = name
                     chat.participants.append(participant)
                     participants_dict[name] = participant
 
-                msg = db.new_message()
+                msg = db.Message()
                 msg.participant = participants_dict[name]
                 msg.text = message['content']
                 msg.datetime = datetime.fromtimestamp(int(message['timestamp_ms']) / 1000)
