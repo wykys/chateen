@@ -5,7 +5,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
-from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship, backref
 
 
@@ -21,11 +21,11 @@ class Message(BaseModel):
     text = Column(Unicode)
     datetime = Column(DateTime)
 
-    chat = relationship('Chat')
-    participant = relationship('Participant')
-
     chat_id = Column(Integer, ForeignKey('chat.id'))
+    chat = relationship('Chat')
+
     participant_id = Column(Integer, ForeignKey('participant.id'))
+    participant = relationship('Participant')
 
     def __repr__(self):
         return f'Message: {self.text}'
@@ -47,6 +47,8 @@ class Participant(BaseModel):
 
 
 class Chat(BaseModel):
+    name = Column(Unicode)
+    selected = Column(Boolean)
     messages = relationship(Message, backref='chat_messege')
     participants = relationship(Participant, secondary='link')
 
@@ -62,9 +64,9 @@ class Chat(BaseModel):
 
 class Link(BaseModel):
     chat_id = Column(Integer, ForeignKey('chat.id'))
-    participant_id = Column(Integer, ForeignKey('participant.id'))
-
     chat = relationship(Chat, backref=backref('link', cascade='all, delete-orphan'))
+
+    participant_id = Column(Integer, ForeignKey('participant.id'))
     participant = relationship(Participant, backref=backref('link', cascade='all, delete-orphan'))
 
     __mapper_args__ = {

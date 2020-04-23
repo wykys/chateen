@@ -1,5 +1,5 @@
 from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
-from database import db
+from database import db, Chat
 
 
 def create_table_button(self, callback, arg):
@@ -62,6 +62,8 @@ def checkbox_decorator(item):
 
 def update_table_chats(self, chats):
 
+    self.chats_array = []
+
     init(self.table_chats, 5)
 
     self.table_chats.setHorizontalHeaderLabels(
@@ -69,6 +71,8 @@ def update_table_chats(self, chats):
     )
 
     for r, chat in enumerate(chats):
+
+        self.chats_array.append(chat.id)
 
         item1 = QtWidgets.QTableWidgetItem()
         item1.setText('Ne')
@@ -95,7 +99,6 @@ def update_table_chats(self, chats):
         self.table_chats.setCellWidget(r, 4, item5)
 
     set_columns_width(self.table_chats, 5)
-
 
 
 def update_table_participants(self, participants):

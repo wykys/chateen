@@ -2,11 +2,10 @@
 # prototyp načítacího objektu
 
 from pathlib import Path
-#from corpus import CorpusDict
+
 
 class LoaderPrototype(object):
     def __init__(self, path: str):
-        #self.corpus = CorpusDict()
         self.authors = []
         self.set_path(path)
         self.load()
@@ -22,11 +21,6 @@ class LoaderPrototype(object):
 
     def load(self):
         print('Load is not defined')
-        pass
 
     def decode(self):
         print('Decode is not defined')
-        pass
-
-    def save(self):
-        self.corpus.save()

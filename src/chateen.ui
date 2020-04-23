@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>883</width>
+    <width>858</width>
     <height>544</height>
    </rect>
   </property>
@@ -116,6 +116,18 @@
        <property name="enabled">
         <bool>true</bool>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>300</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QGroupBox" name="group_who">
@@ -124,7 +136,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <widget class="QRadioButton" name="radio_button_all">
+            <widget class="QRadioButton" name="radio_button_who_all">
              <property name="text">
               <string>Všichni účastníci</string>
              </property>
@@ -134,7 +146,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radio_button_one">
+            <widget class="QRadioButton" name="radio_button_who_one">
              <property name="text">
               <string>Já</string>
              </property>
@@ -364,6 +376,13 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
+            <widget class="QCheckBox" name="checkbox_export_format">
+             <property name="text">
+              <string>Rozdělit na chaty</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="btn_export">
              <property name="enabled">
               <bool>false</bool>
@@ -388,7 +407,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>883</width>
+     <width>858</width>
      <height>22</height>
     </rect>
    </property>
@@ -475,7 +494,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>radio_button_one</sender>
+   <sender>radio_button_who_one</sender>
    <signal>toggled(bool)</signal>
    <receiver>line_edit_participant</receiver>
    <slot>setEnabled(bool)</slot>
@@ -682,6 +701,150 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btn_export</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_btn_export()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>478</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radio_button_who_one</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>102</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radio_button_date_yes</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>line_edit_participant</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>date_from</sender>
+   <signal>dateChanged(QDate)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>date_to</sender>
+   <signal>dateChanged(QDate)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>630</x>
+     <y>187</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkbox_from</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>581</x>
+     <y>169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkbox_to</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_check_export_is_ready()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>580</x>
+     <y>187</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radio_button_who_all</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>checkbox_export_format</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>75</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>702</x>
+     <y>448</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>callback_menu_file_open()</slot>
@@ -693,5 +856,7 @@
   <slot>callback_table_chats_cell_clicked(int,int)</slot>
   <slot>callback_btn_select_all_clicked()</slot>
   <slot>callback_btn_deselect_all_clicked()</slot>
+  <slot>callback_btn_export()</slot>
+  <slot>callback_check_export_is_ready()</slot>
  </slots>
 </ui>

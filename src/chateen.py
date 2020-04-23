@@ -9,6 +9,13 @@ from loader_fb import FbLoader
 from loader_ig import IgLoader
 
 import tables
+from datetime import datetime
+
+
+def print_time(msg=None):
+    if not msg is None:
+        print(msg)
+    print(datetime.now().time())
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -17,16 +24,107 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle('Chateen')
+
+        """
+        print_time('load JSON')
+        IgLoader()
+        print_time('load ok')
+        """
+
         self.load_new_data()
+
+    def load_new_data(self):
+        self.chats_array = []
+        print_time('update table')
+        self.update_table()
+        print_time('completer')
+        self.set_completer_name()
+        print_time('sync')
+        self.sync_db_chat_selected()
+        print_time('check export')
+        self.callback_check_export_is_ready()
+        print_time('load ok')
 
     def set_completer_name(self):
         names = list([n.name for n in db.get_participants().all()])
         completer = QtWidgets.QCompleter(names)
         self.line_edit_participant.setCompleter(completer)
 
-    def load_new_data(self):
-        self.update_table()
-        self.set_completer_name()
+    def sync_db_chat_selected(self, row=None):
+        self.table_chats.blockSignals(True)
+        if row is None:
+            for row, id in enumerate(self.chats_array):
+                item = self.table_chats.item(row, 0)
+                chat = db.get_chats().filter_by(id=id).first()
+                chat.selected = bool(item.checkState())
+        else:
+            id = self.chats_array[row]
+            chat = db.get_chats().filter_by(id=id).first()
+            item = self.table_chats.item(row, 0)
+            chat.selected = bool(item.checkState())
+        db.commit()
+        self.table_chats.blockSignals(False)
+
+    def callback_check_export_is_ready(self):
+        date_from = self.date_from.dateTime().toPython()
+        date_to = self.date_to.dateTime().toPython()
+
+        name = self.line_edit_participant.text()
+
+        export = db.get_messages().join(db.Chat).filter(db.Chat.selected == True)
+
+        if self.date_from.isEnabled():
+            export = export.filter(db.Message.datetime > date_from)
+
+        if self.date_to.isEnabled():
+            export = export.filter(db.Message.datetime < date_to)
+
+        who = self.radio_button_who_one.isChecked()
+        if who:
+            name = self.line_edit_participant.text()
+            export = export.join(db.Participant).filter(db.Participant.name == name)
+
+        if export.count() > 0:
+            self.btn_export.setEnabled(True)
+        else:
+            self.btn_export.setEnabled(False)
+
+    def callback_btn_export(self):
+        print_time('Export Start')
+
+        date_from = self.date_from.dateTime().toPython()
+        date_to = self.date_to.dateTime().toPython()
+
+        name = self.line_edit_participant.text()
+        who = self.radio_button_who_one.isChecked()
+        format_is_chat_split = self.checkbox_export_format.isChecked()
+
+        if format_is_chat_split:
+            export = db.get_chats().filter(db.Chat.selected == True).join(db.Message).join(db.Participant)
+        else:
+            export = db.get_participants().join(db.Message).join(db.Chat).filter(db.Chat.selected == True)
+
+        if self.date_from.isEnabled():
+            export = export.filter(db.Message.datetime > date_from)
+
+        if self.date_to.isEnabled():
+            export = export.filter(db.Message.datetime < date_to)
+
+        if who:
+            name = self.line_edit_participant.text()
+            export = export.filter(db.Participant.name == name)
+
+        # ! zprávy jsou nefiltrované !!!!
+        for exp in export.all():
+            name = exp.name
+            print(name, type(name))
+            if name is None:
+                name = f'chat_{exp.id:09}'
+            path = f'../out/{name}.txt'
+            with open(path, 'w') as fw:
+                fw.writelines([f'<s>{msg.text}</s>\n' for msg in exp.messages])
+
+        print_time('Export End')
 
     def callback_menu_file_open(self):
         self.load_new_data()
@@ -60,9 +158,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_new_data()
 
     def update_table(self):
+        print_time('start update table')
         self.update_table_chats()
+        print_time('update table 1')
         self.update_table_participants()
-        self.update_table_participant_detail(None)
+        print_time('update table 2')
+        self.update_table_participant_detail()
+        print_time('update table ok')
 
     def callback_click_table_chat_button(self, chat):
         self.update_table_chat_detail(chat)
@@ -88,14 +190,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if not chat is None:
             tables.update_table_chat_detail(self, chat)
 
-    def update_table_participant_detail(self, participant):
+    def update_table_participant_detail(self, participant=None):
         if not participant is None:
             tables.update_table_participant_detail(self, participant)
 
     def callback_table_chats_cell_changed(self, row, column, toggle=False, value=None):
-        if toggle == False and value is None:
-            return
-        print('osp', row, column, toggle, value)
         item = self.table_chats.item(row, column)
         self.table_chats.blockSignals(True)
         if toggle:
@@ -110,21 +209,35 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             item.setCheckState(QtCore.Qt.Unchecked)
 
         tables.checkbox_decorator(item)
+        self.sync_db_chat_selected(row)
+        self.callback_check_export_is_ready()
         self.table_chats.blockSignals(False)
 
     def callback_table_chats_cell_clicked(self, row, column):
         self.callback_table_chats_cell_changed(row, 0, toggle=True)
-        print('k')
+
+    def set_select_all_chat(self, state):
+        self.table_chats.blockSignals(True)
+        for row, id in enumerate(self.chats_array):
+            chat = db.get_chats().filter_by(id=id).first()
+            chat.selected = state
+            item = self.table_chats.item(row, 0)
+            item.setCheckState(QtCore.Qt.Checked if state else QtCore.Qt.Unchecked)
+            tables.checkbox_decorator(item)
+        db.commit()
+        self.table_chats.blockSignals(False)
 
     def callback_btn_select_all_clicked(self):
-        for row in range(self.table_chats.rowCount()):
-            self.callback_table_chats_cell_changed(row, 0, value=True)
-        print('g')
+        print('select all')
+        print_time()
+        self.set_select_all_chat(True)
+        print_time()
 
     def callback_btn_deselect_all_clicked(self):
-        for row in range(self.table_chats.rowCount()):
-            self.callback_table_chats_cell_changed(row, 0, value=False)
-        print('b')
+        print('select none')
+        print_time()
+        self.set_select_all_chat(False)
+        print_time()
 
 
 if __name__ == '__main__':
