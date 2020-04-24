@@ -2,7 +2,7 @@
 # wykys 2020
 # databáze konverzací pro generování korpusu
 
-from sqlalchemy import create_engine, select, text, func
+from sqlalchemy import create_engine, text, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
@@ -23,7 +23,6 @@ class Db(object):
         self.conn = engine.connect()
         self.execute = self.conn.execute
         self.text = text
-        self.select = select
         self.func = func
 
         self.query = self.session.query
@@ -44,9 +43,6 @@ class Db(object):
 
     def get_messages(self):
         return self.query(Message)
-
-    def get_count(self):
-        self.query()
 
     def delete_all(self):
         self.__init__()
