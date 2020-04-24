@@ -4,6 +4,24 @@ from database_models import Link
 
 FAKE_NAME = 'Fejkař Otto'
 
+"""
+with participants_with_enough_messages as (
+    select p.id
+    from participant p
+             inner join message m on p.id = m.participant_id
+    group by p.id
+    having count(m.id) > 500
+),
+     fake_user_id as (
+         select p.id
+         from participant p
+         where name = 'Blalba'
+     )
+update link
+set participant_id = fake_user_id.id
+where participant_id not in participants_with_enough_messages;
+"""
+
 
 class DbReduce(object):
     def __init__(self, db):

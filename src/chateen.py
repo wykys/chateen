@@ -22,6 +22,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle('Chateen')
+        self.chats_array = []
 
         FbLoader()
         """
@@ -33,7 +34,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_new_data()
 
     def load_new_data(self):
-        self.chats_array = []
         print_time('update table')
         self.update_table()
         print_time('completer')
@@ -45,7 +45,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print_time('load ok')
 
     def set_completer_name(self):
-        names = list([n.name for n in db.get_participants().all()])
+        names = [n[0] for n in db.query(db.Participant.name).all()]
         completer = QtWidgets.QCompleter(names)
         self.line_edit_participant.setCompleter(completer)
 
@@ -118,7 +118,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if name is None:
                 name = f'chat_{owner.id:09}'
             path = f'../out/{name}.txt'
-            print(name)
 
             if format_is_chat_split:
                 with open(path, 'w', encoding='utf-8') as fw:
@@ -156,6 +155,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_new_data()
 
     def callback_menu_tools_clean(self):
+        self.chats_array = []
         db.delete_all()
         self.load_new_data()
 
