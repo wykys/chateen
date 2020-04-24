@@ -15,9 +15,9 @@ class DbReduce(object):
         self.clean_inactive_chats()
 
     def set_fake_user(self):
-        self.fake_user = self.db.get_participants().filter(self.db.Participant.name == FAKE_NAME)
+        self.fake_user = self.db.get_participants().filter(self.db.Participant.name == FAKE_NAME).first()
         if self.fake_user is None:
-            self.fake_user = self.db.new_participant()
+            self.fake_user = self.db.Participant()
             self.fake_user.name = FAKE_NAME
             self.db.add(self.fake_user)
             self.db.commit()
