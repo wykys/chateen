@@ -14,8 +14,8 @@ from database_reduce import DbReduce
 
 class Db(object):
     def __init__(self):
-        #engine = create_engine(f'sqlite:///:memory:', echo=False)
-        engine = create_engine(f'sqlite:///test.db', echo=False)
+        engine = create_engine(f'sqlite:///:memory:', echo=False)
+        #engine = create_engine(f'sqlite:///test.db', echo=False)
         _session = sessionmaker(bind=engine)
         self.session = _session()
         BaseModel.metadata.create_all(engine)
