@@ -23,6 +23,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle('Chateen')
 
+        FbLoader()
         """
         print_time('load JSON')
         IgLoader()
@@ -48,18 +49,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         completer = QtWidgets.QCompleter(names)
         self.line_edit_participant.setCompleter(completer)
 
-    def sync_db_chat_selected(self, row=None):
+    def sync_db_chat_selected(self):
         self.table_chats.blockSignals(True)
-        if row is None:
-            for row, id in enumerate(self.chats_array):
-                item = self.table_chats.item(row, 0)
-                chat = db.get_chats().filter_by(id=id).first()
-                chat.selected = bool(item.checkState())
-        else:
-            id = self.chats_array[row]
-            chat = db.get_chats().filter_by(id=id).first()
-            item = self.table_chats.item(row, 0)
-            chat.selected = bool(item.checkState())
+        for row, id in enumerate(self.chats_array):
+            state = bool(self.table_chats.item(row, 0).checkState())
+            db.get_chats().filter(db.Chat.id == id).update({db.Chat.selected: state})
         db.commit()
         self.table_chats.blockSignals(False)
 
@@ -133,7 +127,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 with open(path, 'w', encoding='utf-8') as fw:
                     fw.writelines([f'<s>{msg.text}</s>\n' for msg in messages])
 
-
         print_time('Export End')
 
     def callback_menu_file_open_fb(self):
@@ -167,6 +160,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_new_data()
 
     def update_table(self):
+        self.tabwidget.setUpdatesEnabled(False)
         print_time('start update table')
         self.update_table_chats()
         print_time('update table 1')
@@ -174,6 +168,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print_time('update table 2')
         self.update_table_participant_detail()
         print_time('update table ok')
+        self.tabwidget.setUpdatesEnabled(True)
 
     def callback_click_table_chat_button(self, chat):
         self.update_table_chat_detail(chat)
@@ -203,59 +198,48 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if not participant is None:
             tables.update_table_participant_detail(self, participant)
 
-    def callback_table_chats_cell_changed(self, row, column, toggle=False, value=None):
-        item = self.table_chats.item(row, column)
+    def callback_table_chats_cell_clicked(self, row, column):
         self.table_chats.blockSignals(True)
-        if toggle:
-            if bool(item.checkState()):
-                item.setCheckState(QtCore.Qt.Unchecked)
-            else:
-                item.setCheckState(QtCore.Qt.Checked)
-
-        if value == True:
-            item.setCheckState(QtCore.Qt.Checked)
-        elif value == False:
-            item.setCheckState(QtCore.Qt.Unchecked)
-
+        id = self.chats_array[row]
+        item = self.table_chats.item(row, 0)
+        state_old = db.query(db.Chat.selected).filter(db.Chat.id == id).scalar()
+        state = not bool(item.checkState())
+        if state_old == state:
+            state = not state
+        item.setCheckState(QtCore.Qt.Checked if state else QtCore.Qt.Unchecked)
         tables.checkbox_decorator(item)
-        self.sync_db_chat_selected(row)
+        db.get_chats().filter(db.Chat.id == id).update({db.Chat.selected: state})
+        db.commit()
         self.callback_check_export_is_ready()
         self.table_chats.blockSignals(False)
-
-    def callback_table_chats_cell_clicked(self, row, column):
-        self.callback_table_chats_cell_changed(row, 0, toggle=True)
 
     def set_select_all_chat_value(self, state):
         print_time('Update DB')
         self.table_chats.blockSignals(True)
+        self.table_chats.setUpdatesEnabled(False)
         db.query(db.Chat).update({db.Chat.selected: state})
         db.commit()
         print_time('Update OK')
         print_time('Update GUI')
         # todo increase power
         for row in range(self.table_chats.rowCount()):
-            print_time('get item ========================================')
+            #print_time('get item ========================================')
             item = self.table_chats.item(row, 0)
-            print_time('set item value')
+            #print_time('set item value')
             item.setCheckState(QtCore.Qt.Checked if state else QtCore.Qt.Unchecked)
-            print_time('decorator')
+            # print_time('decorator')
             tables.checkbox_decorator(item)
-            print_time('one iteration ok')
+            #print_time('one iteration ok')
+        self.table_chats.setUpdatesEnabled(True)
         self.table_chats.blockSignals(False)
         print_time('Update OK')
         self.callback_check_export_is_ready()
 
     def callback_btn_select_all_clicked(self):
-        print('select all')
-        print_time()
         self.set_select_all_chat_value(True)
-        print_time()
 
     def callback_btn_deselect_all_clicked(self):
-        print('select none')
-        print_time()
         self.set_select_all_chat_value(False)
-        print_time()
 
 
 if __name__ == '__main__':
