@@ -128,8 +128,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             path = f'../out/{name}.txt'
             print(name)
 
-            with open(path, 'w', encoding='utf-8') as fw:
-                fw.writelines([f'<s>{msg.text}</s>\n' for msg in messages])
+            if format_is_chat_split:
+                with open(path, 'w', encoding='utf-8') as fw:
+                    fw.writelines([f'<s>{msg.participant}: {msg.text}</s>\n' for msg in messages])
+            else:
+                with open(path, 'w', encoding='utf-8') as fw:
+                    fw.writelines([f'<s>{msg.text}</s>\n' for msg in messages])
+
+
 
         print_time('Export End')
 
