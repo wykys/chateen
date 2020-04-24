@@ -12,10 +12,8 @@ import tables
 from datetime import datetime
 
 
-def print_time(msg=None):
-    if not msg is None:
-        print(msg)
-    print(datetime.now().time())
+def print_time(msg=''):
+    print(datetime.now().time(), msg)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -136,7 +134,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     fw.writelines([f'<s>{msg.text}</s>\n' for msg in messages])
 
 
-
         print_time('Export End')
 
     def callback_menu_file_open_fb(self):
@@ -146,8 +143,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             caption='Open Facebook JSON',
             dir='../data'
         )
-        FbLoader(path)
-        self.load_new_data()
+        if path != '':
+            FbLoader(path)
+            self.load_new_data()
 
     def callback_menu_file_open_ig(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -156,8 +154,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             caption='Open Instagram JSON',
             dir='../data'
         )
-        IgLoader(path)
-        self.load_new_data()
+        if path != '':
+            IgLoader(path)
+            self.load_new_data()
 
     def callback_menu_tools_reduce(self):
         db.reduce()
@@ -226,27 +225,36 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def callback_table_chats_cell_clicked(self, row, column):
         self.callback_table_chats_cell_changed(row, 0, toggle=True)
 
-    def set_select_all_chat(self, state):
+    def set_select_all_chat_value(self, state):
+        print_time('Update DB')
         self.table_chats.blockSignals(True)
-        for row, id in enumerate(self.chats_array):
-            chat = db.get_chats().filter_by(id=id).first()
-            chat.selected = state
-            item = self.table_chats.item(row, 0)
-            item.setCheckState(QtCore.Qt.Checked if state else QtCore.Qt.Unchecked)
-            tables.checkbox_decorator(item)
+        db.query(db.Chat).update({db.Chat.selected: state})
         db.commit()
+        print_time('Update OK')
+        print_time('Update GUI')
+        # todo increase power
+        for row in range(self.table_chats.rowCount()):
+            print_time('get item ========================================')
+            item = self.table_chats.item(row, 0)
+            print_time('set item value')
+            item.setCheckState(QtCore.Qt.Checked if state else QtCore.Qt.Unchecked)
+            print_time('decorator')
+            tables.checkbox_decorator(item)
+            print_time('one iteration ok')
         self.table_chats.blockSignals(False)
+        print_time('Update OK')
+        self.callback_check_export_is_ready()
 
     def callback_btn_select_all_clicked(self):
         print('select all')
         print_time()
-        self.set_select_all_chat(True)
+        self.set_select_all_chat_value(True)
         print_time()
 
     def callback_btn_deselect_all_clicked(self):
         print('select none')
         print_time()
-        self.set_select_all_chat(False)
+        self.set_select_all_chat_value(False)
         print_time()
 
 
