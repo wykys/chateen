@@ -418,8 +418,7 @@
     <property name="toolTipsVisible">
      <bool>true</bool>
     </property>
-    <addaction name="menu_file_open_fb"/>
-    <addaction name="menu_file_open_ig"/>
+    <addaction name="menu_file_open"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -474,19 +473,17 @@
     <string>Fejkař Otto</string>
    </property>
   </action>
-  <action name="menu_file_open_fb">
-   <property name="text">
-    <string>Otevřít Facebook</string>
-   </property>
-  </action>
-  <action name="menu_file_open_ig">
-   <property name="text">
-    <string>Otevřít Instagram</string>
-   </property>
-  </action>
   <action name="menu_tools_clean">
    <property name="text">
     <string>Vymazat</string>
+   </property>
+  </action>
+  <action name="menu_file_open">
+   <property name="text">
+    <string>Otevřít</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
  </widget>
@@ -569,38 +566,6 @@
     <hint type="destinationlabel">
      <x>705</x>
      <y>280</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>menu_file_open_fb</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>callback_menu_file_open_fb()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>441</x>
-     <y>271</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>menu_file_open_ig</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>callback_menu_file_open_ig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>441</x>
-     <y>271</y>
     </hint>
    </hints>
   </connection>
@@ -828,11 +793,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>menu_file_open</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callback_menu_file_open()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>428</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>callback_menu_file_open()</slot>
-  <slot>callback_menu_file_open_fb()</slot>
-  <slot>callback_menu_file_open_ig()</slot>
   <slot>callback_menu_tools_clean()</slot>
   <slot>callback_menu_tools_reduce()</slot>
   <slot>callback_table_chats_cell_changed(int,int)</slot>

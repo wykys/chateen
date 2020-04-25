@@ -14,13 +14,13 @@ from database_reduce import DbReduce
 
 class Db(object):
     def __init__(self):
-        engine = create_engine(f'sqlite:///:memory:', echo=False)
+        self.engine = create_engine(f'sqlite:///:memory:', echo=False)
         #engine = create_engine(f'sqlite:///test.db', echo=False)
-        _session = sessionmaker(bind=engine)
+        _session = sessionmaker(bind=self.engine)
         self.session = _session()
-        BaseModel.metadata.create_all(engine)
+        BaseModel.metadata.create_all(self.engine)
 
-        self.conn = engine.connect()
+        self.conn = self.engine.connect()
         self.execute = self.conn.execute
         self.text = text
         self.func = func
@@ -48,9 +48,7 @@ class Db(object):
         self.__init__()
 
     def sql(self, cmd):
-        return self.execute(text(
-            cmd
-        )).fetchall()
+        return self.execute(text(cmd))
 
     def reduce(self):
         DbReduce(self)

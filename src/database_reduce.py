@@ -4,24 +4,6 @@ from database_models import Link
 
 FAKE_NAME = 'Fejkař Otto'
 
-"""
-with participants_with_enough_messages as (
-    select p.id
-    from participant p
-             inner join message m on p.id = m.participant_id
-    group by p.id
-    having count(m.id) > 500
-),
-     fake_user_id as (
-         select p.id
-         from participant p
-         where name = 'Blalba'
-     )
-update link
-set participant_id = fake_user_id.id
-where participant_id not in participants_with_enough_messages;
-"""
-
 
 class DbReduce(object):
     def __init__(self, db):
@@ -29,11 +11,27 @@ class DbReduce(object):
         self.db = db
 
         self.set_fake_user()
-        self.clean_inactive_participants()
-        self.clean_inactive_chats()
+        #self.clean_inactive_participants()
+        #self.clean_inactive_chats()
+
+    def sql_clean(self):
+        trasehold = 50
+        cmd = f"""
+        with participants_with_enough_messages as (
+            select p.id
+            from participant p
+                    inner join message m on p.id = m.participant_id
+            group by p.id
+            having count(m.id) < {trasehold}
+        )
+        update link
+        set participant_id = {self.fake_user.id}
+        where participant_id not in participants_with_enough_messages;
+        """
+        self.db.sql(cmd)
 
     def set_fake_user(self):
-        self.fake_user = self.db.get_participants().filter(self.db.Participant.name == FAKE_NAME).first()
+        self.fake_user = self.db.get_participants().filter(self.db.Participant.name == FAKE_NAME).scalar()
         if self.fake_user is None:
             self.fake_user = self.db.Participant()
             self.fake_user.name = FAKE_NAME
@@ -63,7 +61,7 @@ class DbReduce(object):
 
                 link = self.db.query(Link).filter(
                     Link.participant_id == participant.id, Link.chat_id == chat.id
-                ).first()
+                ).scalar()
 
                 if not link is None:
                     self.db.delete(link)
@@ -96,7 +94,7 @@ class DbReduce(object):
 
                     link = self.db.query(Link).filter(
                         Link.participant_id == participant.id, Link.chat_id == chat.id
-                    ).first()
+                    ).scalar()
                     self.db.delete(link)
                     self.db.commit()
 

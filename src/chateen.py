@@ -5,8 +5,7 @@ from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
 
 from template_main_win import Ui_MainWindow
 from database import db
-from loader_fb import FbLoader
-from loader_ig import IgLoader
+from loader import Loader
 
 import tables
 from datetime import datetime
@@ -23,13 +22,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle('Chateen')
         self.chats_array = []
-
-        FbLoader()
-        """
-        print_time('load JSON')
-        IgLoader()
-        print_time('load ok')
-        """
 
         self.load_new_data()
 
@@ -128,26 +120,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         print_time('Export End')
 
-    def callback_menu_file_open_fb(self):
+    def callback_menu_file_open(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
-            filter='Facebook JSON (*.json *.JSON)',
-            caption='Open Facebook JSON',
+            filter='JSON (*.json *.JSON)',
+            caption='Otevři soubor JSON',
             dir='../data'
         )
         if path != '':
-            FbLoader(path)
-            self.load_new_data()
-
-    def callback_menu_file_open_ig(self):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self,
-            filter='Instagram JSON (*.json *.JSON)',
-            caption='Open Instagram JSON',
-            dir='../data'
-        )
-        if path != '':
-            IgLoader(path)
+            Loader(path)
             self.load_new_data()
 
     def callback_menu_tools_reduce(self):
