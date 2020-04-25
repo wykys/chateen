@@ -163,6 +163,9 @@
              <property name="toolTip">
               <string>Účastníku, zadejte své jméno.</string>
              </property>
+             <property name="statusTip">
+              <string>Zadejte svém jméno.</string>
+             </property>
             </widget>
            </item>
           </layout>
@@ -341,6 +344,12 @@
           <layout class="QVBoxLayout" name="verticalLayout_10">
            <item>
             <widget class="QPushButton" name="btn_select_all">
+             <property name="toolTip">
+              <string notr="true"/>
+             </property>
+             <property name="statusTip">
+              <string notr="true">Vybere všechny chaty.</string>
+             </property>
              <property name="text">
               <string>Onznačit vše</string>
              </property>
@@ -348,6 +357,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="btn_deselect_all">
+             <property name="statusTip">
+              <string>Zruší aktuální výběr.</string>
+             </property>
              <property name="text">
               <string>Odznačit vše</string>
              </property>
@@ -377,6 +389,9 @@
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <widget class="QCheckBox" name="checkbox_export_format">
+             <property name="statusTip">
+              <string>Pokud je tato volba aktivní, tak výsledné soubory budou rozděleny dle chatů.</string>
+             </property>
              <property name="text">
               <string>Rozdělit na chaty</string>
              </property>
@@ -386,6 +401,9 @@
             <widget class="QPushButton" name="btn_export">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="statusTip">
+              <string>Vegeneruje data pro korpus.</string>
              </property>
              <property name="text">
               <string>Exportovat</string>
@@ -402,7 +420,7 @@
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -411,7 +429,7 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="file">
+   <widget class="QMenu" name="menu_file">
     <property name="title">
      <string>Soubor</string>
     </property>
@@ -420,44 +438,33 @@
     </property>
     <addaction name="menu_file_open"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
+   <widget class="QMenu" name="menu_help">
     <property name="title">
      <string>Nápověda</string>
     </property>
-    <addaction name="menu_help"/>
+    <addaction name="menu_help_help"/>
     <addaction name="menu_about"/>
    </widget>
-   <widget class="QMenu" name="tools">
+   <widget class="QMenu" name="menu_tools">
     <property name="title">
      <string>Nástroje</string>
     </property>
     <addaction name="menu_tools_reduce"/>
     <addaction name="menu_tools_clean"/>
    </widget>
-   <addaction name="file"/>
-   <addaction name="tools"/>
-   <addaction name="menuHelp"/>
+   <addaction name="menu_file"/>
+   <addaction name="menu_tools"/>
+   <addaction name="menu_help"/>
   </widget>
-  <action name="menu_file_open">
-   <property name="text">
-    <string>Otevřít</string>
-   </property>
-   <property name="toolTip">
-    <string>Otevřít soubor JSON s daty o vašich konverzacích.</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-   <property name="shortcutContext">
-    <enum>Qt::WidgetShortcut</enum>
-   </property>
-  </action>
-  <action name="menu_help">
+  <action name="menu_help_help">
    <property name="text">
     <string>Nápověda programu</string>
    </property>
    <property name="toolTip">
-    <string>Získejte informace o  programu.</string>
+    <string>Zobrazí nápovědu programu.</string>
+   </property>
+   <property name="statusTip">
+    <string>Zobrazí nápovědu programu.</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -467,20 +474,44 @@
    <property name="text">
     <string>O projektu</string>
    </property>
+   <property name="toolTip">
+    <string>Zobrazí více informací o projektu.</string>
+   </property>
+   <property name="statusTip">
+    <string>Zobrazí více informací o projektu.</string>
+   </property>
   </action>
   <action name="menu_tools_reduce">
    <property name="text">
     <string>Fejkař Otto</string>
+   </property>
+   <property name="toolTip">
+    <string>Nástroj pro zjednodušení databáze.</string>
+   </property>
+   <property name="statusTip">
+    <string>Sjednotí přispěvatele co majé méně než 50 zpráv a chaty co mají méně než 100 zpráv.</string>
    </property>
   </action>
   <action name="menu_tools_clean">
    <property name="text">
     <string>Vymazat</string>
    </property>
+   <property name="toolTip">
+    <string>Smaže všechna načtená data.</string>
+   </property>
+   <property name="statusTip">
+    <string>Smaže všechna načtená data.</string>
+   </property>
   </action>
   <action name="menu_file_open">
    <property name="text">
     <string>Otevřít</string>
+   </property>
+   <property name="toolTip">
+    <string>Otevřít soubor JSON s daty o vašich konverzacích.</string>
+   </property>
+   <property name="statusTip">
+    <string>Otevřít soubor JSON s daty o vašich konverzacích.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -790,22 +821,6 @@
     <hint type="destinationlabel">
      <x>702</x>
      <y>448</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>menu_file_open</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>callback_menu_file_open()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>428</x>
-     <y>271</y>
     </hint>
    </hints>
   </connection>

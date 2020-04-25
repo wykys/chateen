@@ -22,6 +22,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle('Chateen')
         self.chats_array = []
+        self.statusbar.showMessage('Ahoj, začni otevřením souboru JSON.')
 
         self.load_new_data()
 
