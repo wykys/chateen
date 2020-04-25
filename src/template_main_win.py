@@ -77,6 +77,7 @@ class Ui_MainWindow(object):
         self.text_more = QTextEdit(self.tab_more)
         self.text_more.setObjectName(u"text_more")
         self.text_more.setVisible(False)
+        self.text_more.setReadOnly(True)
 
         self.verticalLayout_7.addWidget(self.text_more)
 
