@@ -142,7 +142,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_new_data()
 
     def show_html(self, path):
-        with open(path, 'r') as fr:
+        with open(f'../html/{path}', 'r') as fr:
             html = fr.read()
         self.text_more.setText('')
         self.text_more.insertHtml(html)
