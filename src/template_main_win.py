@@ -23,8 +23,8 @@ class Ui_MainWindow(object):
         MainWindow.resize(858, 544)
         self.menu_help_help = QAction(MainWindow)
         self.menu_help_help.setObjectName(u"menu_help_help")
-        self.menu_about = QAction(MainWindow)
-        self.menu_about.setObjectName(u"menu_about")
+        self.menu_help_about = QAction(MainWindow)
+        self.menu_help_about.setObjectName(u"menu_help_about")
         self.menu_tools_reduce = QAction(MainWindow)
         self.menu_tools_reduce.setObjectName(u"menu_tools_reduce")
         self.menu_tools_clean = QAction(MainWindow)
@@ -74,6 +74,12 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.setSpacing(0)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.text_more = QTextEdit(self.tab_more)
+        self.text_more.setObjectName(u"text_more")
+        self.text_more.setVisible(False)
+
+        self.verticalLayout_7.addWidget(self.text_more)
+
         self.table_more = QTableWidget(self.tab_more)
         self.table_more.setObjectName(u"table_more")
 
@@ -269,7 +275,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_help.menuAction())
         self.menu_file.addAction(self.menu_file_open)
         self.menu_help.addAction(self.menu_help_help)
-        self.menu_help.addAction(self.menu_about)
+        self.menu_help.addAction(self.menu_help_about)
         self.menu_tools.addAction(self.menu_tools_reduce)
         self.menu_tools.addAction(self.menu_tools_clean)
 
@@ -293,6 +299,9 @@ class Ui_MainWindow(object):
         self.checkbox_from.toggled.connect(MainWindow.callback_check_export_is_ready)
         self.checkbox_to.toggled.connect(MainWindow.callback_check_export_is_ready)
         self.radio_button_who_all.toggled.connect(self.checkbox_export_format.setEnabled)
+        self.menu_file_open.triggered.connect(MainWindow.callback_menu_file_open)
+        self.menu_help_help.triggered.connect(MainWindow.callback_menu_help_help)
+        self.menu_help_about.triggered.connect(MainWindow.callback_menu_help_about)
 
         self.tabwidget.setCurrentIndex(0)
 
@@ -312,12 +321,12 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.menu_help_help.setShortcut(QCoreApplication.translate("MainWindow", u"F1", None))
 #endif // QT_CONFIG(shortcut)
-        self.menu_about.setText(QCoreApplication.translate("MainWindow", u"O projektu", None))
+        self.menu_help_about.setText(QCoreApplication.translate("MainWindow", u"O projektu", None))
 #if QT_CONFIG(tooltip)
-        self.menu_about.setToolTip(QCoreApplication.translate("MainWindow", u"Zobraz\u00ed v\u00edce informac\u00ed o projektu.", None))
+        self.menu_help_about.setToolTip(QCoreApplication.translate("MainWindow", u"Zobraz\u00ed v\u00edce informac\u00ed o projektu.", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(statustip)
-        self.menu_about.setStatusTip(QCoreApplication.translate("MainWindow", u"Zobraz\u00ed v\u00edce informac\u00ed o projektu.", None))
+        self.menu_help_about.setStatusTip(QCoreApplication.translate("MainWindow", u"Zobraz\u00ed v\u00edce informac\u00ed o projektu.", None))
 #endif // QT_CONFIG(statustip)
         self.menu_tools_reduce.setText(QCoreApplication.translate("MainWindow", u"Fejka\u0159 Otto", None))
 #if QT_CONFIG(tooltip)

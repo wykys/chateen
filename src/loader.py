@@ -21,8 +21,6 @@ class Loader(object):
 
     def load_json_to_database(self):
         if type(self.json) is dict:
-            print('FB Loader')
             FbLoader(self.path)
         elif type(self.json) is list:
-            print('IG Loader')
             IgLoader(self.path)

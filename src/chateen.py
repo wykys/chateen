@@ -141,6 +141,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         db.delete_all()
         self.load_new_data()
 
+    def show_html(self, path):
+        with open(path, 'r') as fr:
+            html = fr.read()
+        self.text_more.setText('')
+        self.text_more.insertHtml(html)
+        self.table_more.setVisible(False)
+        self.text_more.setVisible(True)
+        self.tabwidget.setCurrentWidget(self.tab_more)
+
+
+    def callback_menu_help_help(self):
+        self.show_html('help.html')
+
+    def callback_menu_help_about(self):
+        self.show_html('about.html')
+
     def update_table(self):
         self.tabwidget.setUpdatesEnabled(False)
         print_time('start update table')
@@ -154,10 +170,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def callback_click_table_chat_button(self, chat):
         self.update_table_chat_detail(chat)
+        self.table_more.setVisible(True)
+        self.text_more.setVisible(False)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
     def callback_click_table_participant_button(self, participant):
         self.update_table_participant_detail(participant)
+        self.table_more.setVisible(True)
+        self.text_more.setVisible(False)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
     def update_table_chats(self):
@@ -205,13 +225,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print_time('Update GUI')
         # todo increase power
         for row in range(self.table_chats.rowCount()):
-            #print_time('get item ========================================')
             item = self.table_chats.item(row, 0)
-            #print_time('set item value')
             item.setCheckState(QtCore.Qt.Checked if state else QtCore.Qt.Unchecked)
-            # print_time('decorator')
             tables.checkbox_decorator(item)
-            #print_time('one iteration ok')
         self.table_chats.setUpdatesEnabled(True)
         self.table_chats.blockSignals(False)
         print_time('Update OK')
