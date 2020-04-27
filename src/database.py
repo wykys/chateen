@@ -3,7 +3,7 @@
 # databáze konverzací pro generování korpusu
 
 from sqlalchemy import create_engine, text, func
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
@@ -18,18 +18,15 @@ class Database(object):
             'sqlite:///:memory:',
             echo=False,
             connect_args={'check_same_thread': False, 'timeout': 1000},
-            poolclass=StaticPool,
-            # poolclass=SingletonThreadPool,
+            poolclass=StaticPool
         )
         BaseModel.metadata.create_all(engine)
 
         session_factory = sessionmaker(
             bind=engine,
-            autoflush=True,
-            #transactional = True
+            autoflush=True
         )
         self.session = session_factory()
-        #self.Session = scoped_session(session_factory)
 
         self.conn = engine.connect()
         self.execute = self.conn.execute
@@ -58,10 +55,8 @@ class Database(object):
     def delete_all(self):
         self.__init__()
 
-    """
     def sql(self, cmd):
         return self.execute(text(cmd))
-    """
 
     def reduce(self):
         DbReduce(self)

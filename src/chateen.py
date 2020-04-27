@@ -26,8 +26,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.threadpool = QtCore.QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
-        #self.load_new_data()
-
     def load_new_data(self):
         print_time('update table')
         self.update_table()
