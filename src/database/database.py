@@ -8,8 +8,9 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
 from sqlalchemy.pool import StaticPool, SingletonThreadPool
-from database_models import BaseModel, Chat, Participant, Message, Link
-from database_reduce import DbReduce
+
+from .database_models import BaseModel, Chat, Participant, Message, Link
+from .database_reduce import DbReduce
 
 
 class Database(object):

@@ -1,5 +1,5 @@
-from loader_fb import FbLoader
-from loader_ig import IgLoader
+from .loader_fb import FbLoader
+from .loader_ig import IgLoader
 from pathlib import Path
 import json
 

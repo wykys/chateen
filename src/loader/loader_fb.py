@@ -4,8 +4,8 @@
 
 import json
 from datetime import datetime
-from loader_prototype import LoaderPrototype
 from database import db
+from .loader_prototype import LoaderPrototype
 
 
 class FbLoader(LoaderPrototype):

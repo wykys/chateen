@@ -1,6 +1,6 @@
 # wykys 2020
 
-from database_models import Link
+from .database_models import Link
 
 FAKE_NAME = 'Fejkař Otto'
 

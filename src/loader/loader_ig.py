@@ -3,9 +3,9 @@
 # program pro vytváření korpusů z Instagramu JSON
 
 import json
-from loader_prototype import LoaderPrototype
 from datetime import datetime
 from database import db
+from .loader_prototype import LoaderPrototype
 
 class IgLoader(LoaderPrototype):
     def __init__(self, path='../data/messages.json', callback_progress=None):
