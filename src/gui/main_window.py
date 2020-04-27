@@ -39,7 +39,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_view.setItemDelegateForColumn(0, self.deledate_checkbox)
 
         self.deledate_button = ButtonDelegate('?', self.table_view)
-        self.table_view.setItemDelegateForColumn(2, self.deledate_button)
+        self.table_view.setItemDelegateForColumn(4, self.deledate_button)
+
+        self.table_view.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+        self.table_view.setColumnWidth(4, 40)
+
 
         for i in range(10):
             model.addChat(TableRowChat(i, 'Truhlíci'))

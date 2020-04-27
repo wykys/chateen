@@ -6,17 +6,22 @@ class TableRowChat(object):
         self.id = id
         self.name = name
         self.selected = True
+        self.messages_count = 0
+        self.participants_count = 0
+        self.participants = 'Pepíček a Kája'
         self.is_pressed = False
 
 
 class TableModelChat(QtCore.QAbstractTableModel):
     def __init__(self):
         super(TableModelChat, self).__init__()
-        self.headers = ['Zpracovat', 'Jméno', 'Více']
+        self.headers = ['Zpracovat', 'Počet zpráv', 'Počet účastníků', 'Účastníci', 'Více']
         self.chats = []
         self.index_select = 0
-        self.index_name = 1
-        self.index_button = 2
+        self.index_mmessages_count = 1
+        self.index_participants_count = 2
+        self.index_participants = 3
+        self.index_button = 4
 
     def addChat(self, chat):
         self.beginResetModel()
@@ -31,11 +36,14 @@ class TableModelChat(QtCore.QAbstractTableModel):
 
     def flags(self, index):
         original_flags = super(TableModelChat, self).flags(index)
+        col = index.column()
         flags = (original_flags | QtCore.Qt.ItemIsEnabled) & ~(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable)
-        if index.column() == self.index_select:
+
+        if col == self.index_select:
             flags |= QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEditable
-        elif index.column() == self.index_button:
+        elif col == self.index_button:
             flags |= QtCore.Qt.ItemIsEditable
+
         return flags
 
     def data(self, index, role=QtCore.Qt.ItemDataRole.DisplayRole):
@@ -44,11 +52,22 @@ class TableModelChat(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             if col == self.index_select:
                 return chat.selected
-            elif col == self.index_name:
-                return chat.name
+
+            elif col == self.index_mmessages_count:
+                return chat.messages_count
+
+            elif col == self.index_participants_count:
+                return chat.participants_count
+
+            elif col == self.index_participants:
+                return chat.participants
+
             elif col == self.index_button:
                 return chat.is_pressed
-            return
+
+        elif role == QtCore.Qt.ItemDataRole.TextAlignmentRole:
+            if col == self.index_participants_count or col == self.index_mmessages_count:
+                return QtCore.Qt.AlignCenter
 
     def setData(self, index, value, role=QtCore.Qt.DisplayRole):
 
@@ -62,7 +81,6 @@ class TableModelChat(QtCore.QAbstractTableModel):
             if index.column() == self.index_button:
                 id = self.chats[index.row()].id
                 print('Click:', id)
-
 
         return value
 
