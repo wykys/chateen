@@ -5,10 +5,10 @@ import json
 
 
 class Loader(object):
-    def __init__(self, path):
+    def __init__(self, path, callback_progress=None):
         self.path = path
         if self.open_json(path):
-            self.load_json_to_database()
+            self.load_json_to_database(callback_progress)
 
     def open_json(self, path):
         p = Path(self.path)
@@ -19,8 +19,8 @@ class Loader(object):
             return True
         return False
 
-    def load_json_to_database(self):
+    def load_json_to_database(self, callback_progress):
         if type(self.json) is dict:
-            FbLoader(self.path)
+            FbLoader(self.path, callback_progress)
         elif type(self.json) is list:
-            IgLoader(self.path)
+            IgLoader(self.path, callback_progress)

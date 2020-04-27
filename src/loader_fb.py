@@ -9,7 +9,7 @@ from database import db
 
 
 class FbLoader(LoaderPrototype):
-    def __init__(self, path='../data/message_1.json'):
+    def __init__(self, path='../data/message_1.json', callback_progress=None):
         super().__init__(path)
 
     def load(self):
@@ -34,12 +34,19 @@ class FbLoader(LoaderPrototype):
             self.data = json.load(fr, object_hook=fix_fb_code)
 
     def decode(self):
+        self.progress(0)
+
         chat = db.Chat()
         chat.selected = False
 
         participants_dict = dict()
         for p in db.get_participants():
             participants_dict[p.name] = p
+
+        number_of_messages = 0
+        for message in self.data['messages']:
+            if 'content' in message and 'sender_name' in message and 'timestamp_ms' in message:
+                number_of_messages += 1
 
         for p in self.data['participants']:
             if 'name' in p:
@@ -50,6 +57,7 @@ class FbLoader(LoaderPrototype):
                     chat.participants.append(participant)
                     participants_dict[name] = participant
 
+        messages_counter = 0
         for message in self.data['messages']:
             if 'content' in message and 'sender_name' in message and 'timestamp_ms' in message:
 
@@ -65,6 +73,9 @@ class FbLoader(LoaderPrototype):
                 msg.text = message['content']
                 msg.datetime = datetime.fromtimestamp(int(message['timestamp_ms']) / 1000)
                 chat.messages.append(msg)
+
+                messages_counter += 1
+                self.progress(100 * messages_counter / number_of_messages)
 
         db.add(chat)
         for name, participant in participants_dict.items():
