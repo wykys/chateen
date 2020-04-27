@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-
-
 from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
 
 from database import db
@@ -9,11 +6,15 @@ from loader import Loader
 from .main_window_template import Ui_MainWindow
 from .worker import Worker
 from . import tables
+from .delegate_button import ButtonDelegate
+from .delegate_checkbox import CheckBoxDelegate
+from .table_chat import TableRowChat, TableModelChat
 
 
 def print_time(msg=''):
     from datetime import datetime
     print(datetime.now().time(), msg)
+
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -26,6 +27,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.statusbar.showMessage('Ahoj, začni otevřením souboru JSON.')
         self.threadpool = QtCore.QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
+        """
+        ###################################################################
+        """
+
+        model = TableModelChat()
+        self.table_view.setModel(model)
+
+        self.deledate_checkbox = CheckBoxDelegate(self.table_view)
+        self.table_view.setItemDelegateForColumn(0, self.deledate_checkbox)
+
+        self.deledate_button = ButtonDelegate('?', self.table_view)
+        self.table_view.setItemDelegateForColumn(2, self.deledate_button)
+
+        for i in range(10):
+            model.addChat(TableRowChat(i, 'Truhlíci'))
+
+        """
+        ###################################################################
+        """
 
     def load_new_data(self):
         print_time('update table')

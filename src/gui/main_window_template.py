@@ -57,6 +57,11 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.table_chats)
 
+        self.table_view = QTableView(self.tab_chats)
+        self.table_view.setObjectName(u"table_view")
+
+        self.verticalLayout_4.addWidget(self.table_view)
+
         self.tabwidget.addTab(self.tab_chats, "")
         self.tab_participants = QWidget()
         self.tab_participants.setObjectName(u"tab_participants")
