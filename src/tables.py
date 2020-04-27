@@ -1,5 +1,4 @@
 from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
-from database import db, Chat
 
 
 def create_table_button(self, callback, arg):

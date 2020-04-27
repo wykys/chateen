@@ -3,23 +3,35 @@
 # databáze konverzací pro generování korpusu
 
 from sqlalchemy import create_engine, text, func
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import as_declarative, declared_attr, declarative_base
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, DateTime
-from sqlalchemy.orm import relationship, backref
-
+from sqlalchemy.pool import StaticPool, SingletonThreadPool
 from database_models import BaseModel, Chat, Participant, Message, Link
 from database_reduce import DbReduce
 
 
-class Db(object):
+class Database(object):
     def __init__(self):
-        self.engine = create_engine(f'sqlite:///:memory:', echo=False)
-        #engine = create_engine(f'sqlite:///test.db', echo=False)
-        _session = sessionmaker(bind=self.engine)
-        self.session = _session()
-        BaseModel.metadata.create_all(self.engine)
+        engine = create_engine(
+            'sqlite:///:memory:',
+            echo=False,
+            connect_args={'check_same_thread': True, 'timeout': 1000},
+            #poolclass=StaticPool,
+            # poolclass=SingletonThreadPool,
+        )
+        BaseModel.metadata.create_all(engine)
 
+        session_factory = sessionmaker(
+            bind=engine,
+            autoflush=True,
+            #transactional = True
+        )
+        #self.session = self.session_factory()
+        self.Session = scoped_session(session_factory)
+
+        """
         self.conn = self.engine.connect()
         self.execute = self.conn.execute
         self.text = text
@@ -29,12 +41,14 @@ class Db(object):
         self.add = self.session.add
         self.commit = self.session.commit
         self.delete = self.session.delete
+        """
 
         self.Chat = Chat
         self.Link = Link
         self.Message = Message
         self.Participant = Participant
 
+    """
     def get_chats(self):
         return self.query(Chat)
 
@@ -43,15 +57,21 @@ class Db(object):
 
     def get_messages(self):
         return self.query(Message)
+    """
+
+    def lock(self):
+        return self.Session()
 
     def delete_all(self):
         self.__init__()
 
+    """
     def sql(self, cmd):
         return self.execute(text(cmd))
+    """
 
     def reduce(self):
         DbReduce(self)
 
 
-db = Db()
+#db = Db()

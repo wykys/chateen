@@ -2,11 +2,13 @@
 # prototyp načítacího objektu
 
 from pathlib import Path
-
+from database import Database
 
 class LoaderPrototype(object):
-    def __init__(self, path: str):
-        self.authors = []
+    def __init__(self, path: str, callback_progress=None):
+        self.callback_progress = callback_progress
+        self.db = Database()
+        self.percent = None
         if self.set_path(path):
             self.load()
             self.decode()
@@ -25,3 +27,14 @@ class LoaderPrototype(object):
 
     def decode(self):
         print('Decode is not defined')
+
+    def progress(self, percent):
+        percent = int(percent)
+        if self.percent != percent:
+            self.percent = percent
+            if not self.callback_progress is None:
+                self.callback_progress.emit(percent)
+            else:
+                print(f'\rProgress: {percent} %', end='')
+                if percent == 100:
+                    print()

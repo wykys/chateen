@@ -4,12 +4,12 @@
 from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
 
 from template_main_win import Ui_MainWindow
-from database import db
+#from database import db
 from loader import Loader
 
 import tables
 from datetime import datetime
-
+from worker import Worker
 
 def print_time(msg=''):
     print(datetime.now().time(), msg)
@@ -23,8 +23,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setWindowTitle('Chateen')
         self.chats_array = []
         self.statusbar.showMessage('Ahoj, začni otevřením souboru JSON.')
+        self.threadpool = QtCore.QThreadPool()
+        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
-        self.load_new_data()
+        #self.load_new_data()
 
     def load_new_data(self):
         print_time('update table')
@@ -121,6 +123,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         print_time('Export End')
 
+    def progress(self, percent):
+        self.statusbar.showMessage(f'Načítám data: {percent} %')
+
     def callback_menu_file_open(self):
         path, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
@@ -129,8 +134,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             dir='../data'
         )
         if path != '':
-            Loader(path)
-            self.load_new_data()
+            worker = Worker(Loader, path=path)
+            worker.signals.progress.connect(self.progress)
+            #worker.signals.finished.connect(self.load_new_data)
+            self.threadpool.start(worker)
 
     def callback_menu_tools_reduce(self):
         db.reduce()
@@ -149,7 +156,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_more.setVisible(False)
         self.text_more.setVisible(True)
         self.tabwidget.setCurrentWidget(self.tab_more)
-
 
     def callback_menu_help_help(self):
         self.show_html('help.html')

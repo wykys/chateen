@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+
+
+from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
+import tables
+from datetime import datetime
+from worker import Worker
+
+from database_thread import DatabaseThread
+
+
+from loader import Loader
+from loader_ig import IgLoader
+from loader_fb import FbLoader
+
+from multiprocessing.dummy import Pool as ThreadPool
+
+
+def progress(percent):
+    print(f'\r{percent} %', end='')
+    if percent == 100:
+        print()
+
+
+def finished():
+    dbs = db.Session()
+    p = dbs.query(db.Participant).first()
+    print(p)
+    exit()
+
+
+class Win(QtWidgets.QMainWindow):
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+
+        self.threadpool = QtCore.QThreadPool(self)
+
+        self.statusbar = QtWidgets.QStatusBar(self)
+        self.statusbar.showMessage('Ahoj')
+        self.setStatusBar(self.statusbar)
+
+        self.db = DatabaseThread()
+
+        btn = QtWidgets.QPushButton(self)
+        btn.setText('Načítej data')
+        btn.clicked.connect(self.pool)
+
+        vbox = QtWidgets.QVBoxLayout(self)
+        vbox.addWidget(btn)
+
+        widget = QtWidgets.QWidget(self)
+        widget.setLayout(vbox)
+        widget.show()
+
+        self.setCentralWidget(widget)
+        self.show()
+
+    def pool(self):
+        self.db.signals.progress.connect(self.progress)
+        self.db.start()
+        return
+
+
+        path = '../data/messages.json'
+        worker = Worker(Loader, path=path)
+        worker.signals.progress.connect(self.progress)
+        worker.signals.finished.connect(self.finished)
+        self.threadpool.start(worker)
+        # QtCore.QThreadPool.globalInstance().start(worker)
+
+    def progress(self, percent):
+        self.statusbar.showMessage(f'Načítám data: {percent} %')
+
+    def finished(self):
+        self.statusbar.showMessage('OK')
+
+
+if __name__ == '__main__':
+
+    app = QtWidgets.QApplication()
+    win = Win()
+
+    exit(app.exec_())

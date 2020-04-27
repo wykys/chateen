@@ -5,11 +5,11 @@
 import json
 from datetime import datetime
 from loader_prototype import LoaderPrototype
-from database import db
+from database import Database
 
 
 class FbLoader(LoaderPrototype):
-    def __init__(self, path='../data/message_1.json'):
+    def __init__(self, path='../data/message_1.json', callback_progress=None):
         super().__init__(path)
 
     def load(self):
@@ -34,42 +34,56 @@ class FbLoader(LoaderPrototype):
             self.data = json.load(fr, object_hook=fix_fb_code)
 
     def decode(self):
-        chat = db.Chat()
+        dbs = self.db.Session()
+        self.progress(0)
+
+        chat = self.db.Chat()
         chat.selected = False
 
+        self.db.log()
+
         participants_dict = dict()
-        for p in db.get_participants():
+        for p in self.db.get_participants():
             participants_dict[p.name] = p
+
+        number_of_messages = 0
+        for message in self.data['messages']:
+            if 'content' in message and 'sender_name' in message and 'timestamp_ms' in message:
+                number_of_messages += 1
 
         for p in self.data['participants']:
             if 'name' in p:
                 name = p['name']
                 if not name in participants_dict:
-                    participant = db.Participant()
+                    participant = self.db.Participant()
                     participant.name = name
                     chat.participants.append(participant)
                     participants_dict[name] = participant
 
+        messages_counter = 0
         for message in self.data['messages']:
             if 'content' in message and 'sender_name' in message and 'timestamp_ms' in message:
 
                 # blocked user
                 if not name in participants_dict:
-                    participant = db.Participant()
+                    participant = self.db.Participant()
                     participant.name = name
                     chat.participants.append(participant)
                     participants_dict[name] = participant
 
-                msg = db.Message()
+                msg = self.db.Message()
                 msg.participant = participants_dict[name]
                 msg.text = message['content']
                 msg.datetime = datetime.fromtimestamp(int(message['timestamp_ms']) / 1000)
                 chat.messages.append(msg)
 
-        db.add(chat)
+                messages_counter += 1
+                self.progress(100 * messages_counter / number_of_messages)
+
+        self.db.add(chat)
         for name, participant in participants_dict.items():
-            db.add(participant)
-        db.commit()
+            self.db.add(participant)
+        self.db.commit()
 
 
 if __name__ == '__main__':
