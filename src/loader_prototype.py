@@ -2,12 +2,11 @@
 # prototyp načítacího objektu
 
 from pathlib import Path
-from database import Database
+from database import db
 
 class LoaderPrototype(object):
     def __init__(self, path: str, callback_progress=None):
         self.callback_progress = callback_progress
-        self.db = Database()
         self.percent = None
         if self.set_path(path):
             self.load()

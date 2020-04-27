@@ -17,8 +17,8 @@ class Database(object):
         engine = create_engine(
             'sqlite:///:memory:',
             echo=False,
-            connect_args={'check_same_thread': True, 'timeout': 1000},
-            #poolclass=StaticPool,
+            connect_args={'check_same_thread': False, 'timeout': 1000},
+            poolclass=StaticPool,
             # poolclass=SingletonThreadPool,
         )
         BaseModel.metadata.create_all(engine)
@@ -28,11 +28,10 @@ class Database(object):
             autoflush=True,
             #transactional = True
         )
-        #self.session = self.session_factory()
-        self.Session = scoped_session(session_factory)
+        self.session = session_factory()
+        #self.Session = scoped_session(session_factory)
 
-        """
-        self.conn = self.engine.connect()
+        self.conn = engine.connect()
         self.execute = self.conn.execute
         self.text = text
         self.func = func
@@ -41,14 +40,12 @@ class Database(object):
         self.add = self.session.add
         self.commit = self.session.commit
         self.delete = self.session.delete
-        """
 
         self.Chat = Chat
         self.Link = Link
         self.Message = Message
         self.Participant = Participant
 
-    """
     def get_chats(self):
         return self.query(Chat)
 
@@ -57,10 +54,6 @@ class Database(object):
 
     def get_messages(self):
         return self.query(Message)
-    """
-
-    def lock(self):
-        return self.Session()
 
     def delete_all(self):
         self.__init__()
@@ -74,4 +67,4 @@ class Database(object):
         DbReduce(self)
 
 
-#db = Db()
+db = Database()

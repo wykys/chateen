@@ -4,7 +4,7 @@
 from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
 
 from template_main_win import Ui_MainWindow
-#from database import db
+from database import db
 from loader import Loader
 
 import tables
@@ -136,7 +136,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if path != '':
             worker = Worker(Loader, path=path)
             worker.signals.progress.connect(self.progress)
-            #worker.signals.finished.connect(self.load_new_data)
+            worker.signals.finished.connect(self.load_new_data)
             self.threadpool.start(worker)
 
     def callback_menu_tools_reduce(self):

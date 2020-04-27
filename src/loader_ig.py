@@ -5,7 +5,7 @@
 import json
 from loader_prototype import LoaderPrototype
 from datetime import datetime
-
+from database import db
 
 class IgLoader(LoaderPrototype):
     def __init__(self, path='../data/messages.json', callback_progress=None):
@@ -16,11 +16,10 @@ class IgLoader(LoaderPrototype):
             self.data = json.load(fr)
 
     def decode(self):
-        dbs = self.db.Session()
         self.progress(0)
 
         participants_dict = dict()
-        for p in dbs.query(self.db.Participant):
+        for p in db.query(db.Participant):
             participants_dict[p.name] = p
 
         number_of_messages = 0
@@ -32,12 +31,12 @@ class IgLoader(LoaderPrototype):
         messages_counter = 0
         for data in self.data:
             if 'participants' in data and 'conversation' in data:
-                chat = self.db.Chat()
+                chat = db.Chat()
                 chat.selected = False
 
                 for name in data['participants']:
                     if not name in participants_dict:
-                        participant = self.db.Participant()
+                        participant = db.Participant()
                         participant.name = name
                         chat.participants.append(participant)
                         participants_dict[name] = participant
@@ -49,12 +48,12 @@ class IgLoader(LoaderPrototype):
                         name = message['sender']
                         # blocked user
                         if not name in participants_dict:
-                            participant = self.db.Participant()
+                            participant = db.Participant()
                             participant.name = name
                             chat.participants.append(participant)
                             participants_dict[name] = participant
 
-                        msg = self.db.Message()
+                        msg = db.Message()
                         msg.participant = participants_dict[name]
                         msg.text = message['text']
                         msg.datetime = datetime.fromisoformat(message['created_at'])
@@ -63,11 +62,11 @@ class IgLoader(LoaderPrototype):
                         messages_counter += 1
                         self.progress(100 * messages_counter / number_of_messages)
 
-                dbs.add(chat)
+                db.add(chat)
 
             for name, participant in participants_dict.items():
-                dbs.add(participant)
-            dbs.commit()
+                db.add(participant)
+            db.commit()
 
 
 if __name__ == '__main__':
