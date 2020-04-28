@@ -1,6 +1,6 @@
 from .database import db
 from .loader import Loader, FbLoader, IgLoader
-from .app import App
+from .main import App
 
 __all__ = [
     'db', 'Loader', 'FbLoader', 'IgLoader', 'App'

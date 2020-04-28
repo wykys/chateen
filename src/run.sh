@@ -11,4 +11,4 @@ fi
 . .venv/bin/activate
 export QT_QPA_PLATFORMTHEME=gtk3
 pyside2-uic chateen.ui -o chateen/gui/main_window_template.py
-./main.py
+./chateen.py

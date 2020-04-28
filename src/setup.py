@@ -17,7 +17,7 @@ if sys.version_info < (3, 8):
 
 def setup():
     core.setup(
-        name='Chateen',
+        name='chateen',
         version=chateen.__version__,
         license='GNU GENERAL PUBLIC LICENSE Version 3',
         author='Jan Vykydal',
@@ -29,7 +29,7 @@ def setup():
         ],
         entry_points={
             'gui_scripts': [
-                'Chateen = main.py',
+                'chateen = chateen.main:App',
             ],
         }
     )
