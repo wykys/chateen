@@ -27,7 +27,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_is_lock = False
         self.statusbar.showMessage('Ahoj, začni otevřením souboru JSON.')
         self.threadpool = QtCore.QThreadPool()
-        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
         self.init_table_chats()
         self.init_table_participants()
@@ -74,24 +73,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def update_table(self):
         self.tabwidget.setUpdatesEnabled(False)
-        print_time('start update table')
         self.model_chats.update()
-        print_time('update table 1')
         self.model_participants.update()
-        print_time('update table 2')
         self.model_more.update()
-        print_time('update table ok')
         self.tabwidget.setUpdatesEnabled(True)
 
     def load_new_data_thread(self, callback_progress=None):
-        print_time('update table')
         self.update_table()
-        print_time('load ok')
 
     def load_new_data_thread_finish(self):
-        print_time('completer')
         self.set_completer_name()
-        print_time('check export')
         self.callback_check_export_is_ready()
         self.load_is_lock = False
         self.statusbar.showMessage('Načítání je dokončeno.')
@@ -131,8 +122,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.btn_export.setEnabled(False)
 
     def callback_btn_export(self):
-        print_time('Export Start')
-
         date_from = self.date_from.dateTime().toPython()
         date_to = self.date_to.dateTime().toPython()
 
@@ -174,8 +163,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 with open(path, 'w', encoding='utf-8') as fw:
                     fw.writelines([f'<s>{msg.text}</s>\n' for msg in messages])
-
-        print_time('Export End')
 
     def progress(self, percent):
         self.statusbar.showMessage(f'Načítám data: {percent} %')
@@ -245,19 +232,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tabwidget.setCurrentWidget(self.tab_more)
 
     def set_select_all_chat_value(self, state):
-        print_time('Update DB')
-
         db.query(db.Chat).update({db.Chat.selected: state})
         db.commit()
-        print_time('Update OK')
-        print_time('Update GUI')
-
         self.model_chats.beginResetModel()
         for chat in self.model_chats.chats:
             chat.selected = state
         self.model_chats.endResetModel()
 
-        print_time('Update OK')
         self.callback_check_export_is_ready()
 
     def callback_btn_select_all_clicked(self):
