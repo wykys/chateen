@@ -24,7 +24,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle('Chateen')
-        self.chats_array = []
         self.statusbar.showMessage('Ahoj, začni otevřením souboru JSON.')
         self.threadpool = QtCore.QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -34,8 +33,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.init_table_chat_detail()
         self.init_table_participant_detail()
 
+        self.callback_menu_file_open('../data/messages.json')
+
     def init_table_chats(self):
-        self.model_chats = TableModelChat()
+        self.model_chats = TableModelChat(self)
         self.table_chats.setModel(self.model_chats)
 
         self.deledate_checkbox = CheckBoxDelegate(self.table_chats)
@@ -48,7 +49,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_chats.setColumnWidth(4, 40)
 
     def init_table_participants(self):
-        self.model_participants = TableModelParticipant()
+        self.model_participants = TableModelParticipant(self)
         self.table_participants.setModel(self.model_participants)
 
         self.deledate_button = ButtonDelegate('?', self.table_participants)
@@ -58,7 +59,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_participants.setColumnWidth(3, 40)
 
     def init_table_chat_detail(self):
-        self.model_more = TableModelChatDetail()
+        self.model_more = TableModelChatDetail(self)
         self.table_more.setModel(self.model_more)
 
         self.deledate_button = ButtonDelegate('?', self.table_more)
@@ -68,7 +69,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_more.setColumnWidth(3, 40)
 
     def init_table_participant_detail(self):
-        self.model_more = TableModelParticipantDetail()
+        self.model_more = TableModelParticipantDetail(self)
         self.table_more.setModel(self.model_more)
         self.table_more.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
@@ -88,8 +89,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_table()
         print_time('completer')
         self.set_completer_name()
-        print_time('sync')
-        self.sync_db_chat_selected()
         print_time('check export')
         self.callback_check_export_is_ready()
         print_time('load ok')
@@ -98,14 +97,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         names = [n[0] for n in db.query(db.Participant.name).all()]
         completer = QtWidgets.QCompleter(names)
         self.line_edit_participant.setCompleter(completer)
-
-    def sync_db_chat_selected(self):
-        self.table_chats.blockSignals(True)
-        for row, id in enumerate(self.chats_array):
-            state = bool(self.table_chats.item(row, 0).checkState())
-            db.get_chats().filter(db.Chat.id == id).update({db.Chat.selected: state})
-        db.commit()
-        self.table_chats.blockSignals(False)
 
     def callback_check_export_is_ready(self):
         date_from = self.date_from.dateTime().toPython()
@@ -181,13 +172,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def progress(self, percent):
         self.statusbar.showMessage(f'Načítám data: {percent} %')
 
-    def callback_menu_file_open(self):
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self,
-            filter='JSON (*.json *.JSON)',
-            caption='Otevři soubor JSON',
-            dir='../data'
-        )
+    def callback_menu_file_open(self, path=None):
+        if path is None:
+            path, _ = QtWidgets.QFileDialog.getOpenFileName(
+                self,
+                filter='JSON (*.json *.JSON)',
+                caption='Otevři soubor JSON',
+                dir='../data'
+            )
         if path != '':
             worker = Worker(Loader, path=path)
             worker.signals.progress.connect(self.progress)
@@ -199,7 +191,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_new_data()
 
     def callback_menu_tools_clean(self):
-        self.chats_array = []
         db.delete_all()
         self.load_new_data()
 
@@ -218,48 +209,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def callback_menu_help_about(self):
         self.show_html('about.html')
 
-    def callback_click_table_chat_button(self, chat):
-        self.update_table_chat_detail(chat)
+    def callback_click_table_chat_button(self, chat_id):
+        self.init_table_chat_detail()
+        self.model_more.update(chat_id)
         self.table_more.setVisible(True)
         self.text_more.setVisible(False)
         self.tabwidget.setCurrentWidget(self.tab_more)
 
-    def callback_click_table_participant_button(self, participant):
-        self.update_table_participant_detail(participant)
+    def callback_click_table_participant_button(self, participant_id):
+        self.init_table_participant_detail()
+        self.model_more.update(participant_id)
         self.table_more.setVisible(True)
         self.text_more.setVisible(False)
         self.tabwidget.setCurrentWidget(self.tab_more)
-
-    def callback_table_chats_cell_clicked(self, row, column):
-        self.table_chats.blockSignals(True)
-        id = self.chats_array[row]
-        item = self.table_chats.item(row, 0)
-        state_old = db.query(db.Chat.selected).filter(db.Chat.id == id).scalar()
-        state = not bool(item.checkState())
-        if state_old == state:
-            state = not state
-        item.setCheckState(QtCore.Qt.Checked if state else QtCore.Qt.Unchecked)
-        tables.checkbox_decorator(item)
-        db.get_chats().filter(db.Chat.id == id).update({db.Chat.selected: state})
-        db.commit()
-        self.callback_check_export_is_ready()
-        self.table_chats.blockSignals(False)
 
     def set_select_all_chat_value(self, state):
         print_time('Update DB')
-        self.table_chats.blockSignals(True)
-        self.table_chats.setUpdatesEnabled(False)
+
         db.query(db.Chat).update({db.Chat.selected: state})
         db.commit()
         print_time('Update OK')
         print_time('Update GUI')
-        # todo increase power
-        for row in range(self.table_chats.rowCount()):
-            item = self.table_chats.item(row, 0)
-            item.setCheckState(QtCore.Qt.Checked if state else QtCore.Qt.Unchecked)
-            tables.checkbox_decorator(item)
-        self.table_chats.setUpdatesEnabled(True)
-        self.table_chats.blockSignals(False)
+
+        self.model_chats.beginResetModel()
+        for chat in self.model_chats.chats:
+            chat.selected = state
+        self.model_chats.endResetModel()
+
         print_time('Update OK')
         self.callback_check_export_is_ready()
 

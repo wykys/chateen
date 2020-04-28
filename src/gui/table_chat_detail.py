@@ -4,9 +4,10 @@ from database import db
 
 class TableRowChatDetail(object):
     def __init__(self, message):
+        self.participant_id = message.participant_id
         self.id = message.id
-        self.datetime = message.datetime.strftime('%H:%M:%S - %Y/%m/%d')
-        self.participant = message.participant
+        self.datetime = message.datetime.strftime('%H:%M:%S %Y/%m/%d')
+        self.participant = message.participant.name
         self.text = message.text
         self.is_pressed = False
 
@@ -16,8 +17,9 @@ ROW_BATCH_COUNT = 100
 
 class TableModelChatDetail(QtCore.QAbstractTableModel):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         super(TableModelChatDetail, self).__init__()
+        self.parent = parent
         self.headers = ['Datum', 'Odesilatel', 'Text', 'Více']
         self.messages = []
         self.index_datetime = 0
@@ -85,14 +87,17 @@ class TableModelChatDetail(QtCore.QAbstractTableModel):
 
     def setData(self, index, value, role=QtCore.Qt.DisplayRole):
 
+        col = index.column()
+        row = index.row()
+
         if role == QtCore.Qt.DisplayRole:
-            if index.column() == self.index_button:
-                self.messages[index.row()].is_pressed = value
+            if col == self.index_button:
+                self.messages[row].is_pressed = value
 
         if role == QtCore.Qt.EditRole:
-            if index.column() == self.index_button:
-                id = self.messages[index.row()].id
-                print('Click:', id)
+            if col == self.index_button:
+                id = self.messages[row].participant_id
+                self.parent.callback_click_table_participant_button(id)
 
         return value
 

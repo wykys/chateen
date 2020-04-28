@@ -18,8 +18,9 @@ ROW_BATCH_COUNT = 100
 
 class TableModelChat(QtCore.QAbstractTableModel):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         super(TableModelChat, self).__init__()
+        self.parent = parent
         self.headers = ['Zpracovat', 'Počet zpráv', 'Počet účastníků', 'Účastníci', 'Více']
         self.chats = []
         self.index_select = 0
@@ -99,9 +100,18 @@ class TableModelChat(QtCore.QAbstractTableModel):
                 self.chats[index.row()].is_pressed = value
 
         if role == QtCore.Qt.EditRole:
-            if index.column() == self.index_button:
-                id = self.chats[index.row()].id
-                print('Click:', id)
+            col = index.column()
+            row = index.row()
+            if col == self.index_button:
+                id = self.chats[row].id
+                self.parent.callback_click_table_chat_button(id)
+
+                """
+                chat = db.get_chats().filter(db.Chat.id == id).scalar()
+                chat.selected = not chat.selected
+                db.commit()
+                #self.parent.callback_check_export_is_ready()
+                """
 
         return value
 

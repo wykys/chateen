@@ -16,8 +16,9 @@ ROW_BATCH_COUNT = 100
 
 class TableModelParticipant(QtCore.QAbstractTableModel):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         super(TableModelParticipant, self).__init__()
+        self.parent = parent
         self.headers = ['Jméno', 'Počet zpráv', 'Počet chatů', 'Více']
         self.participants = []
         self.index_name = 0
@@ -83,15 +84,17 @@ class TableModelParticipant(QtCore.QAbstractTableModel):
                 return QtCore.Qt.AlignCenter
 
     def setData(self, index, value, role=QtCore.Qt.DisplayRole):
+        col = index.column()
+        row = index.row()
 
         if role == QtCore.Qt.DisplayRole:
-            if index.column() == self.index_button:
-                self.participants[index.row()].is_pressed = value
+            if col == self.index_button:
+                self.participants[row].is_pressed = value
 
         if role == QtCore.Qt.EditRole:
-            if index.column() == self.index_button:
-                id = self.participants[index.row()].id
-                print('Click:', id)
+            if col == self.index_button:
+                id = self.participants[row].id
+                self.parent.callback_click_table_participant_button(id)
 
         return value
 

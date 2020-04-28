@@ -5,8 +5,8 @@ from database import db
 class TableRowParticipantDetail(object):
     def __init__(self, message):
         self.id = message.id
-        self.datetime = message.datetime.strftime('%H:%M:%S - %Y/%m/%d')
-        self.participant = message.participant
+        self.datetime = message.datetime.strftime('%H:%M:%S %Y/%m/%d')
+        self.participant = message.participant.name
         self.text = message.text
 
 
@@ -15,8 +15,9 @@ ROW_BATCH_COUNT = 100
 
 class TableModelParticipantDetail(QtCore.QAbstractTableModel):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         super(TableModelParticipantDetail, self).__init__()
+        self.parent = parent
         self.headers = ['Datum', 'Odesilatel', 'Text']
         self.messages = []
         self.index_datetime = 0
@@ -55,9 +56,6 @@ class TableModelParticipantDetail(QtCore.QAbstractTableModel):
         original_flags = super(TableModelParticipantDetail, self).flags(index)
         col = index.column()
         flags = (original_flags | QtCore.Qt.ItemIsEnabled) & ~(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable)
-
-        if col == self.index_button:
-            flags |= QtCore.Qt.ItemIsEditable
 
         return flags
 
