@@ -2,7 +2,7 @@
 # prototyp načítacího objektu
 
 from pathlib import Path
-from database import db
+from ..database import db
 
 class LoaderPrototype(object):
     def __init__(self, path: str, callback_progress=None):

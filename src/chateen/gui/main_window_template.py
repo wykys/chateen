@@ -22,7 +22,7 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(858, 544)
         icon = QIcon()
-        icon.addFile(u"../img/chateen.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"img/chateen.svg", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.menu_help_help = QAction(MainWindow)
         self.menu_help_help.setObjectName(u"menu_help_help")
