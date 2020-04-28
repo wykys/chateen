@@ -14,10 +14,10 @@ from .database_reduce import DbReduce
 
 
 class Database(object):
-    def __init__(self):
+    def __init__(self, echo=True):
         engine = create_engine(
             'sqlite:///:memory:',
-            echo=False,
+            echo=echo,
             connect_args={'check_same_thread': False, 'timeout': 1000},
             poolclass=StaticPool
         )
@@ -63,4 +63,4 @@ class Database(object):
         DbReduce(self)
 
 
-db = Database()
+db = Database(echo=True)
