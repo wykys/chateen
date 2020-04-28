@@ -32,7 +32,6 @@ class ButtonDelegate(QtWidgets.QStyledItemDelegate):
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 model.setData(index, False, QtCore.Qt.DisplayRole)
                 if option.rect.contains(event.pos()):
-                    # Model should handle button click action in its setData() method.
                     model.setData(index, self.text, QtCore.Qt.EditRole)
                     return True
         return False

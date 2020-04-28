@@ -9,12 +9,13 @@ from . import tables
 from .delegate_button import ButtonDelegate
 from .delegate_checkbox import CheckBoxDelegate
 from .table_chat import TableRowChat, TableModelChat
-
+from .table_participant import TableRowParticipant, TableModelParticipant
+from .table_chat_detail import TableRowChatDetail, TableModelChatDetail
+from .table_participant_detail import TableRowParticipantDetail, TableModelParticipantDetail
 
 def print_time(msg=''):
     from datetime import datetime
     print(datetime.now().time(), msg)
-
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -28,29 +29,59 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.threadpool = QtCore.QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
-        """
-        ###################################################################
-        """
+        self.init_table_chats()
+        self.init_table_participants()
+        self.init_table_chat_detail()
+        self.init_table_participant_detail()
 
-        model = TableModelChat()
-        self.table_view.setModel(model)
+    def init_table_chats(self):
+        self.model_chats = TableModelChat()
+        self.table_chats.setModel(self.model_chats)
 
-        self.deledate_checkbox = CheckBoxDelegate(self.table_view)
-        self.table_view.setItemDelegateForColumn(0, self.deledate_checkbox)
+        self.deledate_checkbox = CheckBoxDelegate(self.table_chats)
+        self.table_chats.setItemDelegateForColumn(0, self.deledate_checkbox)
 
-        self.deledate_button = ButtonDelegate('?', self.table_view)
-        self.table_view.setItemDelegateForColumn(4, self.deledate_button)
+        self.deledate_button = ButtonDelegate('?', self.table_chats)
+        self.table_chats.setItemDelegateForColumn(4, self.deledate_button)
 
-        self.table_view.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
-        self.table_view.setColumnWidth(4, 40)
+        self.table_chats.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+        self.table_chats.setColumnWidth(4, 40)
 
+    def init_table_participants(self):
+        self.model_participants = TableModelParticipant()
+        self.table_participants.setModel(self.model_participants)
 
-        for i in range(10):
-            model.addChat(TableRowChat(i, 'Truhlíci'))
+        self.deledate_button = ButtonDelegate('?', self.table_participants)
+        self.table_participants.setItemDelegateForColumn(3, self.deledate_button)
 
-        """
-        ###################################################################
-        """
+        self.table_participants.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self.table_participants.setColumnWidth(3, 40)
+
+    def init_table_chat_detail(self):
+        self.model_more = TableModelChatDetail()
+        self.table_more.setModel(self.model_more)
+
+        self.deledate_button = ButtonDelegate('?', self.table_more)
+        self.table_more.setItemDelegateForColumn(3, self.deledate_button)
+
+        self.table_more.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+        self.table_more.setColumnWidth(3, 40)
+
+    def init_table_participant_detail(self):
+        self.model_more = TableModelParticipantDetail()
+        self.table_more.setModel(self.model_more)
+        self.table_more.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+
+    def update_table(self):
+        self.tabwidget.setUpdatesEnabled(False)
+        print_time('start update table')
+        self.model_chats.update()
+        print_time('update table 1')
+        self.model_participants.update()
+        print_time('update table 2')
+        self.model_more.update()
+        print_time('update table ok')
+        self.tabwidget.setUpdatesEnabled(True)
 
     def load_new_data(self):
         print_time('update table')
@@ -187,17 +218,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def callback_menu_help_about(self):
         self.show_html('about.html')
 
-    def update_table(self):
-        self.tabwidget.setUpdatesEnabled(False)
-        print_time('start update table')
-        self.update_table_chats()
-        print_time('update table 1')
-        self.update_table_participants()
-        print_time('update table 2')
-        self.update_table_participant_detail()
-        print_time('update table ok')
-        self.tabwidget.setUpdatesEnabled(True)
-
     def callback_click_table_chat_button(self, chat):
         self.update_table_chat_detail(chat)
         self.table_more.setVisible(True)
@@ -209,26 +229,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table_more.setVisible(True)
         self.text_more.setVisible(False)
         self.tabwidget.setCurrentWidget(self.tab_more)
-
-    def update_table_chats(self):
-        self.table_chats.blockSignals(True)
-        chats = db.get_chats()
-        if not chats is None:
-            tables.update_table_chats(self, chats)
-        self.table_chats.blockSignals(False)
-
-    def update_table_participants(self):
-        participants = db.get_participants()
-        if not participants is None:
-            tables.update_table_participants(self, participants)
-
-    def update_table_chat_detail(self, chat):
-        if not chat is None:
-            tables.update_table_chat_detail(self, chat)
-
-    def update_table_participant_detail(self, participant=None):
-        if not participant is None:
-            tables.update_table_participant_detail(self, participant)
 
     def callback_table_chats_cell_clicked(self, row, column):
         self.table_chats.blockSignals(True)

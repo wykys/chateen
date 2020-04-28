@@ -58,10 +58,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QTableWidget" name="table_chats"/>
-         </item>
-         <item>
-          <widget class="QTableView" name="table_view"/>
+          <widget class="QTableView" name="table_chats"/>
          </item>
         </layout>
        </widget>
@@ -86,7 +83,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QTableWidget" name="table_participants"/>
+          <widget class="QTableView" name="table_participants"/>
          </item>
         </layout>
        </widget>
@@ -124,7 +121,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QTableWidget" name="table_more"/>
+          <widget class="QTableView" name="table_more"/>
          </item>
         </layout>
        </widget>
@@ -642,22 +639,6 @@
     <hint type="sourcelabel">
      <x>-1</x>
      <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>441</x>
-     <y>271</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>table_chats</sender>
-   <signal>cellClicked(int,int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>callback_table_chats_cell_clicked(int,int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>263</x>
-     <y>285</y>
     </hint>
     <hint type="destinationlabel">
      <x>441</x>

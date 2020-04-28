@@ -52,15 +52,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.table_chats = QTableWidget(self.tab_chats)
+        self.table_chats = QTableView(self.tab_chats)
         self.table_chats.setObjectName(u"table_chats")
 
         self.verticalLayout_4.addWidget(self.table_chats)
-
-        self.table_view = QTableView(self.tab_chats)
-        self.table_view.setObjectName(u"table_view")
-
-        self.verticalLayout_4.addWidget(self.table_view)
 
         self.tabwidget.addTab(self.tab_chats, "")
         self.tab_participants = QWidget()
@@ -69,7 +64,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.table_participants = QTableWidget(self.tab_participants)
+        self.table_participants = QTableView(self.tab_participants)
         self.table_participants.setObjectName(u"table_participants")
 
         self.verticalLayout_3.addWidget(self.table_participants)
@@ -89,7 +84,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_7.addWidget(self.text_more)
 
-        self.table_more = QTableWidget(self.tab_more)
+        self.table_more = QTableView(self.tab_more)
         self.table_more.setObjectName(u"table_more")
 
         self.verticalLayout_7.addWidget(self.table_more)
@@ -296,7 +291,6 @@ class Ui_MainWindow(object):
         self.radio_button_date_yes.clicked.connect(self.widget_date_range.show)
         self.menu_tools_clean.triggered.connect(MainWindow.callback_menu_tools_clean)
         self.menu_tools_reduce.triggered.connect(MainWindow.callback_menu_tools_reduce)
-        self.table_chats.cellClicked.connect(MainWindow.callback_table_chats_cell_clicked)
         self.btn_select_all.clicked.connect(MainWindow.callback_btn_select_all_clicked)
         self.btn_deselect_all.clicked.connect(MainWindow.callback_btn_deselect_all_clicked)
         self.btn_export.clicked.connect(MainWindow.callback_btn_export)
