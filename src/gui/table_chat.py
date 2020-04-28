@@ -69,8 +69,9 @@ class TableModelChat(QtCore.QAbstractTableModel):
         return flags
 
     def data(self, index, role=QtCore.Qt.ItemDataRole.DisplayRole):
+        row = index.row()
         col = index.column()
-        chat = self.chats[index.row()]
+        chat = self.chats[row]
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             if col == self.index_select:
                 return chat.selected
@@ -91,6 +92,12 @@ class TableModelChat(QtCore.QAbstractTableModel):
             if col == self.index_participants_count or col == self.index_messages_count:
                 return QtCore.Qt.AlignCenter
 
+        elif role == QtCore.Qt.ItemDataRole.ForegroundRole:
+            if self.chats[row].selected:
+                return QtGui.QColor('green')
+            else:
+                return QtGui.QColor('red')
+
     def setData(self, index, value, role=QtCore.Qt.DisplayRole):
 
         col = index.column()
@@ -98,7 +105,9 @@ class TableModelChat(QtCore.QAbstractTableModel):
 
         if role == QtCore.Qt.DisplayRole:
             if col == self.index_select:
+                self.beginResetModel()
                 self.chats[row].selected = value
+                self.endResetModel()
                 id = self.chats[row].id
                 chat = db.get_chats().filter(db.Chat.id == id).scalar()
                 chat.selected = not chat.selected
