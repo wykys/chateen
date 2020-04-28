@@ -1,5 +1,5 @@
 from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
-from database import db
+from ..database import db
 
 
 class TableRowParticipantDetail(object):

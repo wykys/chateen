@@ -4,7 +4,7 @@
 
 import json
 from datetime import datetime
-from database import db
+from ..database import db
 from .loader_prototype import LoaderPrototype
 
 

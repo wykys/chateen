@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../img/chateen.svg</normaloff>../img/chateen.svg</iconset>
+    <normaloff>img/chateen.svg</normaloff>img/chateen.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">

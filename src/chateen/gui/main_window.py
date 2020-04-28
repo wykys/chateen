@@ -1,7 +1,7 @@
 from PySide2 import QtWidgets, QtGui, QtCore, QtUiTools
 
-from database import db
-from loader import Loader
+from ..database import db
+from ..loader import Loader
 
 from .main_window_template import Ui_MainWindow
 from .worker import Worker
@@ -215,7 +215,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.load_new_data()
 
     def show_html(self, path):
-        with open(f'../html/{path}', 'r', encoding='utf-8') as fr:
+        with open(f'html/{path}', 'r', encoding='utf-8') as fr:
             html = fr.read()
         self.text_more.setText('')
         self.text_more.insertHtml(html)
