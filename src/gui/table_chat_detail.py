@@ -32,7 +32,8 @@ class TableModelChatDetail(QtCore.QAbstractTableModel):
         self.beginResetModel()
         self.messages = []
         if not chat_id is None:
-            for message in db.get_chats().filter(db.Chat.id == chat_id).first().messages:
+            messages = db.get_messages().filter(db.Message.chat_id == chat_id).order_by(db.Message.datetime)
+            for message in messages:
                 self.messages.append(TableRowChatDetail(message))
         self.endResetModel()
 

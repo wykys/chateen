@@ -29,7 +29,8 @@ class TableModelParticipantDetail(QtCore.QAbstractTableModel):
         self.beginResetModel()
         self.messages = []
         if not participant_id is None:
-            for message in db.get_participants().filter(db.Participant.id == participant_id).first().messages:
+            messages = db.get_messages().filter(db.Message.participant_id == participant_id).order_by(db.Message.datetime)
+            for message in messages:
                 self.messages.append(TableRowParticipantDetail(message))
         self.endResetModel()
 
@@ -54,7 +55,6 @@ class TableModelParticipantDetail(QtCore.QAbstractTableModel):
 
     def flags(self, index):
         original_flags = super(TableModelParticipantDetail, self).flags(index)
-        col = index.column()
         flags = (original_flags | QtCore.Qt.ItemIsEnabled) & ~(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable)
 
         return flags
