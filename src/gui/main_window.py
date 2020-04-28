@@ -23,6 +23,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle('Chateen')
+        self.load_is_lock = False
         self.statusbar.showMessage('Ahoj, začni otevřením souboru JSON.')
         self.threadpool = QtCore.QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -31,8 +32,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.init_table_participants()
         self.init_table_chat_detail()
         self.init_table_participant_detail()
-
-        self.callback_menu_file_open('../data/messages.json')
 
     def init_table_chats(self):
         self.model_chats = TableModelChat(self)
@@ -83,7 +82,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print_time('update table ok')
         self.tabwidget.setUpdatesEnabled(True)
 
-    def load_new_data(self):
+    def load_new_data(self, callback_progress=None):
         print_time('update table')
         self.update_table()
         print_time('completer')
@@ -91,6 +90,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print_time('check export')
         self.callback_check_export_is_ready()
         print_time('load ok')
+        self.load_is_lock = False
+
+    def load_new_data_thread(self):
+        worker = Worker(self.load_new_data)
+        worker.signals.finished.connect(
+            lambda: self.statusbar.showMessage('Načítání je dokončeno.')
+        )
+        self.threadpool.start(worker)
 
     def set_completer_name(self):
         names = [n[0] for n in db.query(db.Participant.name).all()]
@@ -171,19 +178,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def progress(self, percent):
         self.statusbar.showMessage(f'Načítám data: {percent} %')
 
-    def callback_menu_file_open(self, path=None):
-        if path is None:
+    def callback_menu_file_open(self):
+        if not self.load_is_lock:
+            self.load_is_lock = True
             path, _ = QtWidgets.QFileDialog.getOpenFileName(
                 self,
                 filter='JSON (*.json *.JSON)',
                 caption='Otevři soubor JSON',
                 dir='../data'
             )
-        if path != '':
-            worker = Worker(Loader, path=path)
-            worker.signals.progress.connect(self.progress)
-            worker.signals.finished.connect(self.load_new_data)
-            self.threadpool.start(worker)
+            if path != '':
+                worker = Worker(Loader, path=path)
+                worker.signals.progress.connect(self.progress)
+                worker.signals.finished.connect(self.load_new_data_thread)
+                self.threadpool.start(worker)
 
     def callback_menu_tools_reduce(self):
         db.reduce()
