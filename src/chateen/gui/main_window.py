@@ -12,6 +12,7 @@ from .table_participant import TableRowParticipant, TableModelParticipant
 from .table_chat_detail import TableRowChatDetail, TableModelChatDetail
 from .table_participant_detail import TableRowParticipantDetail, TableModelParticipantDetail
 
+
 def print_time(msg=''):
     from datetime import datetime
     print(datetime.now().time(), msg)
@@ -82,21 +83,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print_time('update table ok')
         self.tabwidget.setUpdatesEnabled(True)
 
-    def load_new_data(self, callback_progress=None):
+    def load_new_data_thread(self, callback_progress=None):
         print_time('update table')
         self.update_table()
+        print_time('load ok')
+
+    def load_new_data_thread_finish(self):
         print_time('completer')
         self.set_completer_name()
         print_time('check export')
         self.callback_check_export_is_ready()
-        print_time('load ok')
         self.load_is_lock = False
+        self.statusbar.showMessage('Načítání je dokončeno.')
 
-    def load_new_data_thread(self):
-        worker = Worker(self.load_new_data)
-        worker.signals.finished.connect(
-            lambda: self.statusbar.showMessage('Načítání je dokončeno.')
-        )
+    def load_new_data(self):
+        worker = Worker(self.load_new_data_thread)
+        worker.signals.finished.connect(self.load_new_data_thread_finish)
         self.threadpool.start(worker)
 
     def set_completer_name(self):
@@ -190,7 +192,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if path != '':
                 worker = Worker(Loader, path=path)
                 worker.signals.progress.connect(self.progress)
-                worker.signals.finished.connect(self.load_new_data_thread)
+                worker.signals.finished.connect(self.load_new_data)
                 self.threadpool.start(worker)
             else:
                 self.load_is_lock = False
@@ -199,12 +201,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         db.reduce()
         self.load_new_data()
 
-
     def callback_menu_tools_reduce(self):
         self.load_is_lock = True
         self.statusbar.showMessage('Fejkař Otto právě pracuje.')
         worker = Worker(self.database_reduce_thread)
-        #worker.signals.progress.connect(self.progress)
+        # worker.signals.progress.connect(self.progress)
         worker.signals.finished.connect(
             lambda: self.statusbar.showMessage('Fejkař Otto dohákoval.')
         )
