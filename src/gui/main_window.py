@@ -5,7 +5,6 @@ from loader import Loader
 
 from .main_window_template import Ui_MainWindow
 from .worker import Worker
-from . import tables
 from .delegate_button import ButtonDelegate
 from .delegate_checkbox import CheckBoxDelegate
 from .table_chat import TableRowChat, TableModelChat
