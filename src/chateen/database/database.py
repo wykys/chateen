@@ -63,4 +63,4 @@ class Database(object):
         DbReduce(self)
 
 
-db = Database(echo=True)
+db = Database(echo=False)

@@ -33,7 +33,9 @@ class TableModelParticipant(QtCore.QAbstractTableModel):
     def update(self):
         self.beginResetModel()
         self.participants = []
-        for participant in db.get_participants():
+        participants = db.get_participants().join(
+            db.Message).group_by(db.Participant.id).order_by(db.func.count(db.Message.id).desc())
+        for participant in participants:
             self.participants.append(TableRowParticipant(participant))
         self.endResetModel()
 

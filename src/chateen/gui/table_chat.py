@@ -36,7 +36,9 @@ class TableModelChat(QtCore.QAbstractTableModel):
     def update(self):
         self.beginResetModel()
         self.chats = []
-        for chat in db.get_chats():
+        chats = db.get_chats().join(db.Message).group_by(
+            db.Chat.id).order_by(db.func.count(db.Message.id).desc()).all()
+        for chat in chats:
             self.chats.append(TableRowChat(chat))
         self.endResetModel()
         self.index
