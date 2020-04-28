@@ -27,6 +27,9 @@ class TableModelParticipant(QtCore.QAbstractTableModel):
         self.index_button = 3
         self.rows_loaded = ROW_BATCH_COUNT
 
+    def endInsertRows(self):
+        return
+
     def update(self):
         self.beginResetModel()
         self.participants = []

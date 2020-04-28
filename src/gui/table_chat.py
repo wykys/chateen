@@ -30,12 +30,16 @@ class TableModelChat(QtCore.QAbstractTableModel):
         self.index_button = 4
         self.rows_loaded = ROW_BATCH_COUNT
 
+    def endInsertRows(self):
+        return
+
     def update(self):
         self.beginResetModel()
         self.chats = []
         for chat in db.get_chats():
             self.chats.append(TableRowChat(chat))
         self.endResetModel()
+        self.index
 
     def rowCount(self, index=QtCore.QModelIndex()):
         return len(self.chats)

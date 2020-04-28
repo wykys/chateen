@@ -25,6 +25,9 @@ class TableModelParticipantDetail(QtCore.QAbstractTableModel):
         self.index_text = 2
         self.rows_loaded = ROW_BATCH_COUNT
 
+    def endInsertRows(self):
+        return
+
     def update(self, participant_id=None):
         self.beginResetModel()
         self.messages = []
