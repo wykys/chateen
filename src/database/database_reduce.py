@@ -9,10 +9,9 @@ class DbReduce(object):
     def __init__(self, db):
 
         self.db = db
-
         self.set_fake_user()
-        #self.clean_inactive_participants()
-        #self.clean_inactive_chats()
+        self.clean_inactive_participants()
+        self.clean_inactive_chats()
 
     def sql_clean(self):
         trasehold = 50

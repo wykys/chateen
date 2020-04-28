@@ -192,10 +192,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 worker.signals.progress.connect(self.progress)
                 worker.signals.finished.connect(self.load_new_data_thread)
                 self.threadpool.start(worker)
+            else:
+                self.load_is_lock = False
 
-    def callback_menu_tools_reduce(self):
+    def database_reduce_thread(self, callback_progress=None):
         db.reduce()
         self.load_new_data()
+
+
+    def callback_menu_tools_reduce(self):
+        self.load_is_lock = True
+        self.statusbar.showMessage('Fejkař Otto právě pracuje.')
+        worker = Worker(self.database_reduce_thread)
+        #worker.signals.progress.connect(self.progress)
+        worker.signals.finished.connect(
+            lambda: self.statusbar.showMessage('Fejkař Otto dohákoval.')
+        )
+        self.threadpool.start(worker)
 
     def callback_menu_tools_clean(self):
         db.delete_all()
