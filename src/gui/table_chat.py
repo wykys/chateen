@@ -93,25 +93,25 @@ class TableModelChat(QtCore.QAbstractTableModel):
 
     def setData(self, index, value, role=QtCore.Qt.DisplayRole):
 
+        col = index.column()
+        row = index.row()
+
         if role == QtCore.Qt.DisplayRole:
-            if index.column() == self.index_select:
-                self.chats[index.row()].selected = value
-            elif index.column() == self.index_button:
-                self.chats[index.row()].is_pressed = value
-
-        if role == QtCore.Qt.EditRole:
-            col = index.column()
-            row = index.row()
-            if col == self.index_button:
+            if col == self.index_select:
+                self.chats[row].selected = value
                 id = self.chats[row].id
-                self.parent.callback_click_table_chat_button(id)
-
-                """
                 chat = db.get_chats().filter(db.Chat.id == id).scalar()
                 chat.selected = not chat.selected
                 db.commit()
-                #self.parent.callback_check_export_is_ready()
-                """
+                self.parent.callback_check_export_is_ready()
+
+            elif col == self.index_button:
+                self.chats[row].is_pressed = value
+
+        if role == QtCore.Qt.EditRole:
+            if col == self.index_button:
+                id = self.chats[row].id
+                self.parent.callback_click_table_chat_button(id)
 
         return value
 
