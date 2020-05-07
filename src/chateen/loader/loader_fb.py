@@ -56,11 +56,13 @@ class FbLoader(LoaderPrototype):
                     participant.name = name
                     chat.participants.append(participant)
                     participants_dict[name] = participant
+                    print(name)
 
         messages_counter = 0
         for message in self.data['messages']:
             if 'content' in message and 'sender_name' in message and 'timestamp_ms' in message:
 
+                name = message['sender_name']
                 # blocked user
                 if not name in participants_dict:
                     participant = db.Participant()
