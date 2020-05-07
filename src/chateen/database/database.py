@@ -36,6 +36,7 @@ class Database(object):
 
         self.query = self.session.query
         self.add = self.session.add
+        self.flush = self.session.flush
         self.commit = self.session.commit
         self.delete = self.session.delete
 

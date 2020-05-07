@@ -56,6 +56,7 @@ class FbLoader(LoaderPrototype):
                     participant.name = name
                     chat.participants.append(participant)
                     participants_dict[name] = participant
+                    db.add(participant)
 
         messages_counter = 0
         for message in self.data['messages']:
@@ -68,19 +69,22 @@ class FbLoader(LoaderPrototype):
                     participant.name = name
                     chat.participants.append(participant)
                     participants_dict[name] = participant
+                    db.add(participant)
+
+                elif not chat in participants_dict[name].chats:
+                    chat.participants.append(participants_dict[name])
 
                 msg = db.Message()
                 msg.participant = participants_dict[name]
                 msg.text = message['content']
                 msg.datetime = datetime.fromtimestamp(int(message['timestamp_ms']) / 1000)
                 chat.messages.append(msg)
+                db.add(msg)
 
                 messages_counter += 1
                 self.progress(100 * messages_counter / number_of_messages)
 
         db.add(chat)
-        for name, participant in participants_dict.items():
-            db.add(participant)
         db.commit()
 
 

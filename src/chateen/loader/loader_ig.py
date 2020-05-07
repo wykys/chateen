@@ -53,6 +53,9 @@ class IgLoader(LoaderPrototype):
                             chat.participants.append(participant)
                             participants_dict[name] = participant
 
+                        elif not chat in participants_dict[name].chats:
+                            chat.participants.append(participants_dict[name])
+
                         msg = db.Message()
                         msg.participant = participants_dict[name]
                         msg.text = message['text']
@@ -64,8 +67,6 @@ class IgLoader(LoaderPrototype):
 
                 db.add(chat)
 
-            for name, participant in participants_dict.items():
-                db.add(participant)
             db.commit()
 
 
