@@ -152,6 +152,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 messages = export_msg.filter(db.Message.participant == owner)
 
+            messages = messages.order_by(db.Message.datetime)
+
             name = owner.name
             if name is None:
                 name = f'chat_{owner.id:09}'
