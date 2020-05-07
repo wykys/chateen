@@ -53,7 +53,7 @@ class IgLoader(LoaderPrototype):
                             chat.participants.append(participant)
                             participants_dict[name] = participant
 
-                        elif not chat in participants_dict[name].chats:
+                        elif not participants_dict[name] in chat.participants:
                             chat.participants.append(participants_dict[name])
 
                         msg = db.Message()

@@ -16,6 +16,7 @@ from .database_reduce import DbReduce
 class Database(object):
     def __init__(self, echo=True):
         engine = create_engine(
+            #'sqlite:///test.db',
             'sqlite:///:memory:',
             echo=echo,
             connect_args={'check_same_thread': False, 'timeout': 1000},

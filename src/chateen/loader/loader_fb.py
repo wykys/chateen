@@ -71,7 +71,7 @@ class FbLoader(LoaderPrototype):
                     participants_dict[name] = participant
                     db.add(participant)
 
-                elif not chat in participants_dict[name].chats:
+                elif not participants_dict[name] in chat.participants:
                     chat.participants.append(participants_dict[name])
 
                 msg = db.Message()
