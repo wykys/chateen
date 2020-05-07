@@ -10,7 +10,7 @@ from .loader_prototype import LoaderPrototype
 
 class FbLoader(LoaderPrototype):
     def __init__(self, path='../data/message_1.json', callback_progress=None):
-        super().__init__(path)
+        super().__init__(path, callback_progress)
 
     def load(self):
         def fix_fb_code(obj):
