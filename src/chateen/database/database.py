@@ -15,6 +15,8 @@ from .database_reduce import DbReduce
 
 class Database(object):
     def __init__(self, echo=True):
+        self.echo = echo
+
         engine = create_engine(
             #'sqlite:///test.db',
             'sqlite:///:memory:',
@@ -56,7 +58,7 @@ class Database(object):
         return self.query(Message)
 
     def delete_all(self):
-        self.__init__()
+        self.__init__(self.echo)
 
     def sql(self, cmd):
         return self.execute(text(cmd))
