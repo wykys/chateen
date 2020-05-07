@@ -56,7 +56,6 @@ class FbLoader(LoaderPrototype):
                     participant.name = name
                     chat.participants.append(participant)
                     participants_dict[name] = participant
-                    print(name)
 
         messages_counter = 0
         for message in self.data['messages']:
