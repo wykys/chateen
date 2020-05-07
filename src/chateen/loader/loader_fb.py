@@ -38,6 +38,7 @@ class FbLoader(LoaderPrototype):
 
         chat = db.Chat()
         chat.selected = False
+        db.add(chat)
 
         participants_dict = dict()
         for p in db.get_participants():
@@ -84,7 +85,6 @@ class FbLoader(LoaderPrototype):
                 messages_counter += 1
                 self.progress(100 * messages_counter / number_of_messages)
 
-        db.add(chat)
         db.commit()
 
 

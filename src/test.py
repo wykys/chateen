@@ -5,5 +5,5 @@ from chateen import Loader
 
 
 if __name__ == '__main__':
-    Loader('../data/bug_message_1.json')
+    Loader('../data/bug_message_2.json')
     db.reduce()

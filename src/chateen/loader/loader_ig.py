@@ -7,6 +7,7 @@ from datetime import datetime
 from ..database import db
 from .loader_prototype import LoaderPrototype
 
+
 class IgLoader(LoaderPrototype):
     def __init__(self, path='../data/messages.json', callback_progress=None):
         super().__init__(path, callback_progress)
@@ -33,6 +34,7 @@ class IgLoader(LoaderPrototype):
             if 'participants' in data and 'conversation' in data:
                 chat = db.Chat()
                 chat.selected = False
+                db.add(chat)
 
                 for name in data['participants']:
                     if not name in participants_dict:
@@ -64,8 +66,6 @@ class IgLoader(LoaderPrototype):
 
                         messages_counter += 1
                         self.progress(100 * messages_counter / number_of_messages)
-
-                db.add(chat)
 
             db.commit()
 
