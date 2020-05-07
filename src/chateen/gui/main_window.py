@@ -165,6 +165,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 with open(path, 'w', encoding='utf-8') as fw:
                     fw.writelines([f'<s>{msg.text}</s>\n' for msg in messages])
+        self.statusbar.showMessage('Export dokončen.')
 
     def progress(self, percent):
         self.statusbar.showMessage(f'Načítám data: {percent} %')
